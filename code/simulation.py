@@ -44,6 +44,8 @@ def init_simulation(): # che parametri ci vanno?
 	pop_count_type = np.array(count_population(population[0]))	
 
 	return Data(population, image_matrix, pop_count_type)
+
+	########################################da rifare la le strutture dati siccome np.array è omogeneo quindi serve già una lista oppure la lista è fuori e copia i dati
 		
 
 def random_int(low_value, high_value, size, dtype):# tengo la generazione randomica separate per il testing
@@ -51,6 +53,16 @@ def random_int(low_value, high_value, size, dtype):# tengo la generazione random
 	return np.random.randint(low_value, high_value, size, dtype)
 
 
+def avoid_repetition(array_to_test):
+    
+    a=np.unique(array_to_test, return_counts=True)[1]
+          
+    b=np.ones_like(a)
+          
+    return np.array_equal(a,b)
+
+
+    
 def count_population(array_pop):
 
 	count_row=np.zeros(12,np.byte)
@@ -66,11 +78,11 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 
 	"""
 
-    	A pair of individuals, donator-reipient, interact and donator decide whether cooperate
+    A pair of individuals, donator-reipient, interact and donator decide whether cooperate
 
-    	Parameters:
+    Parameters:
 
-    	-----------------------------
+    -----------------------------
 	
 	donator: the index that rappresent an individual from the population that could cooperate
 
@@ -83,10 +95,13 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 	sources_array: an array 1x100 with the sources for each individuals
 
 	image_matrix: a matrix 100x100 with the image of each individuals (row) about other individuals (column)
+    
+    
+    
+    ###Returns a tupla with the updated population_array and the updated reputation_matrix
 
    	-----------------------------
 
-    	###Returns a tupla with the updated population_array and the updated reputation_matrix
 	
     	"""
 
@@ -106,27 +121,50 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 
 	for x in range(len(onlookers)):
 
-		image_matrix[onlookers[x]][donator]+=1
+		image_matrix[onlookers[x]][donator]+=bonus
 
 	###return (sources_array, image_matrix) (vale tenerlo con variabile locale?)
 
-def life():
-
-	"""
-
-    	The evolution of the life of the members of a generation
-
-    	Parameters:
-
-    	-----------------------------
-	
-	donator: 
-
-   	-----------------------------
-
-    	Returns
-	
-    	"""
-	
-		
-	
+def life_cycle(population, image_matrix):
+    
+    """
+    Implemantation of a life cycle of a generation with ten encounters
+    
+    and the arise of the next generation based on sources
+    
+    Parameters:
+    
+    -----------------------------
+    
+    population: a 2x100 array with strategy (0-row) and sources (1-row) of
+    
+    each individuals
+    
+    image_matrix: a 100x100 matrix with the image scores of each individuals
+    
+    (0-row) about the others (1-row)
+    
+    -----------------------------
+    
+    Return
+    
+    """
+    print(population[1], image_matrix, sep='\n')
+    
+    population_size=len(population[1])
+    
+    x=0
+              
+    while x<10: # si ripete all'infinito
+              
+        #DRandO = Donator, Recipient and Onlookers
+              
+        DRandO=random_int( 0, population_size, 12, np.byte)
+              
+        if avoid_repetition(DRandO):
+                  
+            x+=1
+            
+            interaction(DRandO[0], DRandO[1], DRandO[-10:], population[0], population[1], image_matrix)
+            
+    print(population[1], image_matrix, sep='\n')
