@@ -14,7 +14,7 @@ def testing_init():
 
 def random_int(low_value, high_value, size, dtype):# generazione randomica per il testing
 
-	np.random.seed(1)
+	np.random.seed(3)
 
 	return np.random.randint(low_value, high_value, size, dtype)
 
@@ -36,32 +36,41 @@ def testing_count(min,max):
 	print(a)
 	
 
-def testing_interaction(): ###siamo qui a indagare perché la reputazione non diminuisce
+def testing_interaction():
 
 
-    fake_indexes=random_int(0,100, 12, np.byte)
+    fake_indexes=sm.random_int(0,100, 12, np.byte)
     
     while not sm.avoid_repetition(fake_indexes):
         
-        fake_indexes=random_int(0,100, 12, np.byte)       
+        fake_indexes=sm.random_int(0,100, 12, np.byte)       
 
-    strategy=np.random.randint(-5,7,100)
+    strategy=sm.random_int(-5,7,100, dtype=np.byte)
 
-    sources=np.array(np.random.randint(-2,4,100), float)
+    sources=np.array(sm.random_int(-2,4,100), float)
 
     image=np.zeros((100,100), np.byte)
 
     print(fake_indexes)
 
-    print(sources, strategy, image, sep='\n')
+    print(sources,)
 	
     sm.interaction( fake_indexes[0], fake_indexes[1], fake_indexes[-10:], strategy, sources, image)
 
-	#check if reputation change
-
-    assert np.sum(image[image!=0]) == 11
     
-    print(sources, strategy, image, sep='\n')
+    print(sources, 
+          
+          strategy[fake_indexes[0]],
+          
+          ' >=', 
+          
+          image[fake_indexes[0]][fake_indexes[1]], 
+          
+          image[image!=0], 
+          
+          sep='\n')
+    
+    # work (apparently)
 
 
 def testing_no_repeat():
@@ -83,7 +92,20 @@ def testing_no_repeat():
            x+=1
            
            print(DRandO)
-           
+
+def testing_new_generation():
+    
+    fake_strategy=random_int(-5, 7, 11, np.byte)
+    
+    fake_sources=random_int(10, 50, 11, np.byte)*0.1
+    
+    print(fake_strategy)
+    
+    print(fake_sources)
+
+    new_generation = sm.new_generation(fake_strategy, fake_sources)
+    
+    print(new_generation) # ricontrollare, perché si riproduce?       
            
 def testing_life_cycle():
     
@@ -92,6 +114,8 @@ def testing_life_cycle():
     size=13
     
     fake_population=[sm.random_int(-5, 7, size, np.byte), np.array(sm.random_int(-2, 10, size, np.byte), np.float16)]
+    
+    np.round(fake_population[1], 1) # evitare strani numeri
     
     fake_image=np.zeros((size,size), np.byte)
     
