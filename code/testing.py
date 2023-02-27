@@ -14,7 +14,7 @@ def testing_init():
 
 def random_int(low_value, high_value, size, dtype):# generazione randomica per il testing
 
-	np.random.seed(3)
+	np.random.seed(4)
 
 	return np.random.randint(low_value, high_value, size, dtype)
 
@@ -95,9 +95,9 @@ def testing_no_repeat():
 
 def testing_new_generation():
     
-    fake_strategy=random_int(-5, 7, 11, np.byte)
+    fake_strategy=random_int(-5, 7, 10, np.byte)
     
-    fake_sources=random_int(10, 50, 11, np.byte)*0.1
+    fake_sources=random_int(0, 5, 10, np.byte)
     
     print(fake_strategy)
     
@@ -105,19 +105,46 @@ def testing_new_generation():
 
     new_generation = sm.new_generation(fake_strategy, fake_sources)
     
-    print(new_generation) # ricontrollare, perché si riproduce?       
+    assert len(fake_strategy) == len(new_generation)
+    
+    print(new_generation)     
            
 def testing_life_cycle():
     
     # no valore negativi all'image score
     
-    size=13
+    size=100
     
-    fake_population=[sm.random_int(-5, 7, size, np.byte), np.array(sm.random_int(-2, 10, size, np.byte), np.float16)]
-    
-    np.round(fake_population[1], 1) # evitare strani numeri
+    fake_population=[sm.random_int(-5, 7, size, np.byte), np.array(sm.random_int(0, 7, size, np.byte), np.byte)]
     
     fake_image=np.zeros((size,size), np.byte)
     
-    sm.life_cycle(fake_population, fake_image)
+    print(sm.life_cycle(fake_population, fake_image, n_interactions= 125))
+    
+def not_a_mess_with_append():
+    
+    size=5
+    
+    populations=np.zeros((1,2,size), np.byte)
+    
+    generation=0
+    
+    old_sources= np.empty(size, np.byte)
+    
+    new_population = np.array(np.vstack((np.ones(size, np.byte),np.zeros_like(old_sources))))
+    
+    print(populations, old_sources, new_population, sep='\n\n')
+    
+    populations[generation][1]=old_sources
+    
+    populations=np.append(populations, np.array([new_population], np.byte), axis=0)
+    
+    print('\n\n', populations, '\n\n\n')
+    
+    
+    assert np.shape(populations) == (2,2,size)
+    
+    print(populations[1][0])
+    
+    print(populations[0][1])
           

@@ -8,10 +8,13 @@ Data = namedtuple( 'Data',
     'count_type'])
 
 # controllare per cercare di sosituire ogni for con un'operazione tra array
+# funzione a parte per proportions
+#ricontrollare tutto sources perché adesso partono da zero e sono int, non float
+#implementare l'interruttore per attivare i controlli e quanto frequenti
 
 ##### Qui ci vuole una lista con tutti gli array con tutti i dati
 
-def init_simulation(): # che parametri ci vanno?
+def init_simulation(): # che parametri ci vanno? Probabilmente questa funzione è inutile
 
     """
 
@@ -109,7 +112,7 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
      
     bonus=-1
     
-    print(strategy_array[donator], '>=', image_matrix[donator][recipient], '?')
+    #print(strategy_array[donator], '>=', image_matrix[donator][recipient], '?')
 
     if strategy_array[donator]>=image_matrix[donator][recipient]:
 		
@@ -119,7 +122,7 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 
         sources_array[recipient]+=1
         
-        print(donator, 'ha cooperato con', recipient )
+        #print(donator, 'ha cooperato con', recipient )
 
 		
     image_matrix[recipient][donator]+=bonus
@@ -130,7 +133,7 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 
         image_matrix[onlookers[x]][donator]+=bonus
         
-    print('La reputazione di ', donator, 'è cambiata di', bonus, 'per', recipient, onlookers)
+    #print('La reputazione di ', donator, 'è cambiata di', bonus, 'per', recipient, onlookers)
 
     ###return (sources_array, image_matrix) (vale tenerlo con variabile locale?)
 
@@ -140,7 +143,7 @@ def new_generation(strategy, sources):
     """
     Creation of the next generation; each indivuals has an offspring
     
-    based on its sources
+    based on its sources. Explain procedure. So no risk of outrange
     
     Parameters:
         
@@ -162,56 +165,55 @@ def new_generation(strategy, sources):
     
     """
     
-    tot_sources=np.round(np.sum(sources),1)
+    tot_sources=np.sum(sources)
     
     tot_pop=len(strategy) #total number of individuals
         
     inv_tot_sources=np.float16(1/tot_sources) #save time
     
-    
     new_strategy=np.array([], dtype=np.byte)
     
-    # array con le proporzioni degli pay-off
+    # array con le proporzioni dei pay-off
     
-    proportions=sources*inv_tot_sources
+    proportions = np.float16(sources*inv_tot_sources)
     
-    offspring = np.byte(np.rint(tot_pop*proportions))
-      
+    offspring = np.float16(tot_pop*proportions)
+    
+    #print(offspring)
+    
+    frac_offspring = np.array(np.modf(offspring)[0], np.float16)
+    
+    int_offspring = np.array(np.modf(offspring)[1], np.byte)
+    
+    #print(frac_offspring)
+    
+    #print(int_offspring)
+    
     for individual in range(tot_pop):
-            
-            if len(new_strategy) == tot_pop:
-                
-                break
         
-            appendix=np.full(offspring[individual], strategy[individual] )
-            
-            
-            new_strategy=np.append(new_strategy, appendix)
-            
-            
-        # alla fine di questo ciclo può essere che non si abbia una
-        # popolazione con la stessa numerosità di quella iniziale
-        # allora si aggiungono individui seguendo in ordine decrescente le proporzioni   
-    i=1
-        
+        appendix=np.full(int_offspring[individual], strategy[individual], np.byte)
+               
+        new_strategy=np.append(new_strategy, appendix)
+
+
     while len(new_strategy) < tot_pop:
         
-        # search the i-th highest value among the proportions
+        # search the highest value among the frac_offspring
         
-        i_th_index = np.where(proportions == np.sort(proportions)[-i])
-
-        appendix = strategy[i_th_index]
+        appendix= strategy[np.argmax(frac_offspring)]
         
         new_strategy=np.append(new_strategy, appendix)
         
-        i+=1
+        frac_offspring[np.argmax(frac_offspring)]=0
         
-    print(new_strategy)
+    #print(new_strategy)
+        
+    np.random.shuffle(new_strategy)
             
     return new_strategy
             
     
-def life_cycle(population, image_matrix):
+def life_cycle(strategy, n_interactions):
     
     """
     Implemantation of a life cycle of a generation with ten encounters
@@ -235,13 +237,17 @@ def life_cycle(population, image_matrix):
     Return
     
     """
-    print(population[1], image_matrix, sep='\n')
+    print(strategy,)
     
-    population_size=len(population[1])
+    image_matrix = np.zeros((100,100), np.byte)
+    
+    sources = np.zeros_like(strategy, np.byte)
+    
+    population_size=len(strategy)
     
     x=0
               
-    while x<125: #125 interactions
+    while x<n_interactions: #125 interactions
               
         #DRandO = Donator, Recipient and Onlookers
               
@@ -251,7 +257,50 @@ def life_cycle(population, image_matrix):
                   
             x+=1
             
-            interaction(DRandO[0], DRandO[1], DRandO[-10:], population[0], population[1], image_matrix)
+            interaction(DRandO[0], DRandO[1], DRandO[-10:], strategy, sources, image_matrix)
             
-    print(population[1], image_matrix, sep='\n')
+    print(sources, image_matrix, sep='\n')
     
+    old_sources=np.array(sources)
+    
+    new_population=new_generation(strategy, sources)
+    
+    return old_sources, new_population #le risorse sono della vecchia generazione
+
+def evolution(n_generation, n_interactions, populations):
+    
+    """
+    Evolution of the various generations
+    
+    Parameters:
+    
+    -----------------------------
+    
+    n_generation: numero di generazione
+    
+    n_interactions: numero di interazioni in ogni life cycle
+    
+    population: populations[generazione][strategie/risorse finali][individui]
+    
+    shape iniziale (1,2,size of population)
+    
+    -----------------------------
+    
+    Return the data
+    
+    """  
+    
+    
+    strategy = populations[0][0]
+    
+    for generation in range(n_generation):
+        
+        old_sources, new_strategies = np.array(life_cycle(strategy, n_interactions))
+        
+        populations[generation][1]= old_sources
+        
+        new_population = np.vstack((new_strategies, np.zeros_like(new_strategies)), dtype=np.byte)
+        
+        populations=np.append(populations, np.array([new_population], np.byte), axis=0)
+        
+    return populations
