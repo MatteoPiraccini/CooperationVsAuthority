@@ -1,24 +1,14 @@
 import numpy as np
 
-from collections import namedtuple
+# implementare l'interruttore per attivare i controlli e quanto frequenti
 
-Data = namedtuple( 'Data', 
-    [ 'population' , 
-    'sources',
-    'count_type'])
-
-# controllare per cercare di sosituire ogni for con un'operazione tra array
-# funzione a parte per proportions
-#ricontrollare tutto sources perché adesso partono da zero e sono int, non float
-#implementare l'interruttore per attivare i controlli e quanto frequenti
-
-##### Qui ci vuole una lista con tutti gli array con tutti i dati
+# 
 
 def init_simulation(): # che parametri ci vanno? Probabilmente questa funzione è inutile
 
     """
 
-    Create the 0-generation and initialize the structures that contains data
+    Create the 0-generation
 
     Parameters:
 
@@ -34,27 +24,19 @@ def init_simulation(): # che parametri ci vanno? Probabilmente questa funzione �
 
     population=np.zeros((1,2,100), np.byte) # 1°-dim: generation, 2°-dim: strategy/sources, 3°-dim: individual
 	
-    population[0][0] = np.array(random_int(-5, +7, (1,100), np.short)) #7 is excluse from the random number
-
-	#setup of a separate array for the source of every individual, in order to save memory
-	
-    sources = np.zeros(100, np.half)
-
-	#setup of the matrix of reputation
-
-    image_matrix = np.zeros((100,100), np.byte)
+    population[0][0] = np.array(random_int(-5, +7, (1,100), np.byte)) #7 is excluse from the random number
 
 	#setup the matrix that will count the amount of every type related to generation
 
-    pop_count_type = np.array(count_population(population[0]))	
+    #pop_count_type = np.array(count_population(population[0]))	
 
-    return Data(population, image_matrix, pop_count_type)
+    return population
 
 	########################################da rifare la le strutture dati siccome np.array è omogeneo quindi serve già una lista oppure la lista è fuori e copia i dati
 		
 
 def random_int(low_value, high_value, size, dtype=np.byte):# tengo la generazione randomica separate per il testing
-
+    
     return np.random.randint(low_value, high_value, size, dtype)
 
 
@@ -66,19 +48,7 @@ def avoid_repetition(array_to_test):
           
     return np.array_equal(a,b)
 
-
-    
-def count_population(array_pop):
-
-    count_row=np.zeros(12,np.byte)
-
-    for x in range(-5,+7):
-
-        count_row[x]=len(array_pop[array_pop==x])
-
-    return count_row ##### [0 1 2 3 4 5 6 -5 -4 -3 -2 -1]
-
-
+   
 def interaction(donator, recipient, onlookers, strategy_array, sources_array, image_matrix):
     
     """
@@ -118,17 +88,13 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 		
         bonus=1
 
-        #sources_array[donator]-=0.1 non usato nel modello originale
-
         sources_array[recipient]+=1
         
         #print(donator, 'ha cooperato con', recipient )
 
 		
     image_matrix[recipient][donator]+=bonus
-
-    np.round(sources_array,1)# avoid junk decimal
-
+    
     for x in range(len(onlookers)):
 
         image_matrix[onlookers[x]][donator]+=bonus
@@ -237,7 +203,7 @@ def life_cycle(strategy, n_interactions):
     Return
     
     """
-    print(strategy,)
+    #print(strategy,)
     
     image_matrix = np.zeros((100,100), np.byte)
     
@@ -259,7 +225,7 @@ def life_cycle(strategy, n_interactions):
             
             interaction(DRandO[0], DRandO[1], DRandO[-10:], strategy, sources, image_matrix)
             
-    print(sources, image_matrix, sep='\n')
+    #print(sources, image_matrix, sep='\n')
     
     old_sources=np.array(sources)
     
@@ -295,12 +261,12 @@ def evolution(n_generation, n_interactions, populations):
     
     for generation in range(n_generation):
         
-        old_sources, new_strategies = np.array(life_cycle(strategy, n_interactions))
+        old_sources, new_strategies = np.array(life_cycle(strategy, n_interactions), np.byte)
         
         populations[generation][1]= old_sources
         
         new_population = np.vstack((new_strategies, np.zeros_like(new_strategies)), dtype=np.byte)
         
-        populations=np.append(populations, np.array([new_population], np.byte), axis=0)
+        populations=np.append(populations, [new_population], axis=0)
         
     return populations
