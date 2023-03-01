@@ -4,6 +4,10 @@ import simulation as sm
 
 import analysis as an
 
+import plot
+
+import pandas as pd
+
 # ricontrolare tutto, togliere tutti i print e i return, inserire if-else al posto di assertion e togliere la roba su dimensionalità
 # riguardare pagina esame
 
@@ -190,3 +194,37 @@ def testing_an_strategy():
     print(fake_data)
     
     print(an.frequency_strategies(fake_data))
+    
+def testing_plot():
+    
+    n_simulations=7
+    
+    fake_data=(np.random.uniform(0.0, 0.25, (n_simulations,12)))
+    
+    # ci vogliono i parametri
+    
+    ls=(2,3,4,True, False,2)
+    
+    parameters=()
+    
+    for i in range(n_simulations):
+        
+        parameters=(*parameters, ls)
+    
+    plot.draw_data(fake_data, parameters)
+    
+def testing_reorganize():
+    
+    fake_data=np.array([[0,1,2,3,4,5,6,-5,-4,-3,-2,-1] for i in range(10)])
+    
+    print(fake_data)
+    
+    print(plot.reorganize_data(fake_data))
+    
+def try_to_import():
+    
+    parameters=pd.read_csv('./Parameters.txt')
+    
+    parameters[0].head()
+    
+    

@@ -2,41 +2,6 @@ import csv
 
 import numpy as np
 
-from collections import namedtuple
-
-Data = namedtuple( 'Data', 
-    [ 'population' , 
-    'sources',
-    'count_type'])
-
-# calcolare la frequenza della strategie delle varie generazione per ognuna delle simulazioni
-
-def count_strategy(strategy):
-    
-    """
-
-    Count the frequencies of the many kind of population
-
-    Parameters:
-
-    -----------------------------
-	
-    strategy: an array 1x(size of population)
-    
-    -----------------------------
-
-    Returns a tupla with a 3D array with data about the 0-generation, the matrix of reputation and an array that store the amount of every types of individual
-	
-    """
-
-    count_array=np.zeros(12,np.byte)
-
-    for x in range(-5,+7):
-
-        count_array[x]=len(strategy[strategy==x])
-        
-    return count_array ##### [0 1 2 3 4 5 6 -5 -4 -3 -2 -1]
-
 def frequency_strategies(data_simulation):
     
     """
