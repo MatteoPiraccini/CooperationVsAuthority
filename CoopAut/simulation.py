@@ -4,7 +4,7 @@ import numpy as np
 
 # 
 
-def init_simulation(): # che parametri ci vanno? Probabilmente questa funzione è inutile
+def init_simulation(population_size): # che parametri ci vanno? Probabilmente questa funzione è inutile
 
     """
 
@@ -22,9 +22,9 @@ def init_simulation(): # che parametri ci vanno? Probabilmente questa funzione �
 
 	#creation of the 0-generation
 
-    population=np.zeros((1,2,100), np.byte) # 1°-dim: generation, 2°-dim: strategy/sources, 3°-dim: individual
+    population=np.zeros((1,2,population_size), np.byte) # 1°-dim: generation, 2°-dim: strategy/sources, 3°-dim: individual
 	
-    population[0][0] = np.array(random_int(-5, +7, (1,100), np.byte)) #7 is excluse from the random number
+    population[0][0] = np.array(random_int(-5, +7, (1, population_size), np.byte)) #7 is excluse from the random number
 
 	#setup the matrix that will count the amount of every type related to generation
 
@@ -205,7 +205,9 @@ def life_cycle(strategy, n_interactions):
     """
     #print(strategy,)
     
-    image_matrix = np.zeros((100,100), np.byte)
+    population_size=len(strategy)
+    
+    image_matrix = np.zeros((population_size,population_size), np.byte)
     
     sources = np.zeros_like(strategy, np.byte)
     
@@ -233,7 +235,7 @@ def life_cycle(strategy, n_interactions):
     
     return old_sources, new_population #le risorse sono della vecchia generazione
 
-def evolution(n_generation, n_interactions, populations):
+def evolution(N_interactions, N_generation, populations):
     
     """
     Evolution of the various generations
@@ -259,9 +261,9 @@ def evolution(n_generation, n_interactions, populations):
     
     strategy = populations[0][0]
     
-    for generation in range(n_generation):
+    for generation in range(N_generation):
         
-        old_sources, new_strategies = np.array(life_cycle(strategy, n_interactions), np.byte)
+        old_sources, new_strategies = np.array(life_cycle(strategy, N_interactions), np.byte)
         
         populations[generation][1]= old_sources
         

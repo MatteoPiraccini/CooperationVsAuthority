@@ -17,28 +17,48 @@ parameters=list() # contenitore dei parametri per ogni lista, fare una namedtupl
 # poi provare con differenti quantità di popolazioni e interazioni
 # togliere varaibili globali
 
-n_generation=[2] # esclusa la 0
-
-n_interactions=[125]
-
-tot_simulations=1
-
-populations=np.array(sm.init_simulation(), np.byte) # cercare di eliminarlo
-
-assert np.shape(populations) == (1,2,100)
-
-data_list=[] #cercare di spostarla in simulation
-
-for n_simulations in range(tot_simulations):
+def main():
     
-    data_list.append((sm.evolution(n_generation[n_simulations], n_interactions[n_simulations], populations))) ### deve fare tutto in colpo solo con diversi tipi di simulazione
+    csv=np.genfromtxt('https://raw.githubusercontent.com/MatteoPiraccini/CooperationVsAuthority/main/Parameters.csv', delimiter=',', skip_header=1)
+    
+    print(csv)
+    
+    ls_parameters=[]
+    
+    # max parameters : 255, 255
+    
+    for n_simulation in range(len(csv)):
+        
+        row=(np.ubyte(csv[n_simulation][0]), #size of population
+                                                
+               np.ubyte(csv[n_simulation][1]), #N of interactions
+                                                
+               np.uintc(csv[n_simulation][2]), #N of generations
+                                                
+               np.bool_(csv[n_simulation][3]), #Punishment
+                                                
+               np.bool_(csv[n_simulation][4]), #Reward
+                                                
+               np.ubyte(csv[n_simulation][5])) #N of controls
+        
+        ls_parameters.append(row)
+        
+    par = tuple(ls_parameters)
 
-data=np.array(data_list)
+    populations=np.array(sm.init_simulation(par[0]), np.byte) # cercare di eliminarlo
 
-an.analize_simulations(data)
+    assert np.shape(populations) == (1,2, par[0])
 
-# manca l'analisi
+    data_list=[] #cercare di spostarla in simulation
 
-plot.draw_data(data, parameters)
+    for n_simulations in range(len(par)):
+    
+        data_list.append((sm.evolution(par[1][n_simulations], par[2][n_simulations], populations)))
 
-# creare file csv con tutti i dati
+    data=np.array(data_list)
+
+    results=an.analize_simulations(data)
+
+
+    plot.draw_data(results[0], parameters)
+

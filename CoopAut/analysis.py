@@ -1,5 +1,3 @@
-import csv
-
 import numpy as np
 
 def frequency_strategies(data_simulation):
@@ -68,9 +66,11 @@ def analize_simulations(all_data):
     
     for N_simulation in range(len(all_data)):
         
-        stat_strategies=np.append(stat_strategies, frequency_strategies(all_data[N_simulation]), axis=0)
+        stat_strategies=np.array(np.append(stat_strategies, frequency_strategies(all_data[N_simulation]), axis=0), dtype=np.float16)
         
     mean_strategy=np.mean(stat_strategies, 1, np.float32)
+    
+    stat_strategies.tofile('stat_strategy.csv',sep=',',format='%10.5f')
         
     return stat_strategies, mean_strategy
     

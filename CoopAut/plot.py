@@ -18,7 +18,7 @@ def reorganize_data(data):
     
     return re_data
 
-def draw_data(data, parameters):
+def draw_data(data, par):
     
     """
 
@@ -50,37 +50,37 @@ def draw_data(data, parameters):
     
     string=''
     
-    N_simulation=0
+    n_simulation=0
        
     for row in range(rows):
         
         for column in range(3):
             
-            if N_simulation > len(data)-1:
+            if n_simulation > len(data)-1:
                 
                 break
         
-            axs[row][column].stem(np.arange(-5,7), data[N_simulation], markerfmt=',', basefmt=None)
+            axs[row][column].stem(np.arange(-5,7), data[n_simulation], markerfmt=',', basefmt=None)
             
-            if (parameters[N_simulation][3] & np.logical_not(parameters[N_simulation][4])):
+            if (par[n_simulation][3] & np.logical_not(par[n_simulation][4])):
                 
                 string='Punishment'
                 
-            if (parameters[N_simulation][4] & np.logical_not(parameters[N_simulation][3])):
+            if (par[n_simulation][4] & np.logical_not(par[n_simulation][3])):
                 
                 string='Reward'
                 
-            if (parameters[N_simulation][4] & parameters[N_simulation][3]):
+            if (par[n_simulation][4] & par[n_simulation][3]):
                 
                 string='Punishment&Reward'
             
-            axs[row][column].title.set_text('Pop.size= '+str(parameters[N_simulation][0])+' '+ string+ ' Controls= '+ str(parameters[N_simulation][5]))
+            axs[row][column].title.set_text('Pop.size= '+str(par[n_simulation][0])+' '+ string+ ' Controls= '+ str(par[n_simulation][5]))
             
             axs[row][column].set_xlabel('Strategy, k')
             
             axs[row][column].set_ylabel('Frequencies')
             
-            N_simulation+=1
+            n_simulation+=1
             
     plt.title()
         

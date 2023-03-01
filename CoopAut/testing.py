@@ -223,8 +223,28 @@ def testing_reorganize():
     
 def try_to_import():
     
-    parameters=pd.read_csv('https://github.com/MatteoPiraccini/CooperationVsAuthority/blob/main/CoopAut/Parameters.csv', header=0)
+    csv=np.genfromtxt('https://raw.githubusercontent.com/MatteoPiraccini/CooperationVsAuthority/main/Parameters.csv', delimiter=',', skip_header=1)
     
-    parameters[0].head()
+    print(csv)
     
+    ls_parameters=[]
     
+    # max parameters : 255, 255
+    
+    for n_simulation in range(len(csv)):
+        
+        tupla=(np.ubyte(csv[n_simulation][0]),
+                                                
+                                                np.ubyte(csv[n_simulation][1]),
+                                                
+                                                np.uintc(csv[n_simulation][2]),
+                                                
+                                                np.bool_(csv[n_simulation][3]),
+                                                
+                                                np.bool_(csv[n_simulation][4]),
+                                                
+                                                np.ubyte(csv[n_simulation][5]))
+        
+        ls_parameters.append(tupla)
+    
+    print(ls_parameters)  
