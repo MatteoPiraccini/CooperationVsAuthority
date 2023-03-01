@@ -1,2 +1,0 @@
-size_population, interactions, generations, punishment, reward, controls
-100, 125, 100000, False, False, 10

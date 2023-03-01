@@ -223,7 +223,7 @@ def testing_reorganize():
     
 def try_to_import():
     
-    parameters=pd.read_csv('./Parameters.txt')
+    parameters=pd.read_csv('https://github.com/MatteoPiraccini/CooperationVsAuthority/blob/main/CoopAut/Parameters.txt')
     
     parameters[0].head()
     
