@@ -6,11 +6,8 @@ import analysis as an
 
 import plot
 
-# bisogna caricare un file csv con ogni riga contente i parametri della simulazione
-# si avrà un array di parametri
 # https://numpy.org/doc/stable/user/basics.creation.html
 # parameters format = size_population, #interactions(unico parametro per tutti), #generations(unico parametro per tutti), Punishment, Reward, #controls
-parameters=list() # contenitore dei parametri per ogni lista, fare una namedtupla
 
 # confrontare frequenze con popolazione fissa e le varie combo di controlli
 #(punire, premiare, entrambi, variare il numero di controlli)
@@ -45,20 +42,19 @@ def main():
         
     par = tuple(ls_parameters)
 
-    populations=np.array(sm.init_simulation(par[0]), np.byte) # cercare di eliminarlo
-
-    assert np.shape(populations) == (1,2, par[0])
-
     data_list=[] #cercare di spostarla in simulation
 
-    for n_simulations in range(len(par)):
+    for n_simulation in range(len(par)):
+        
+        populations=np.array(sm.init_simulation(par[n_simulation][0]), np.byte) # cercare di eliminarlo
     
-        data_list.append((sm.evolution(par[1][n_simulations], par[2][n_simulations], populations)))
+        data_list.append((sm.evolution(par[n_simulation][1], par[n_simulation][2], populations)))
 
     data=np.array(data_list)
 
     results=an.analize_simulations(data)
 
 
-    plot.draw_data(results[0], parameters)
-
+    plot.draw_data(results[0], par)
+    
+    

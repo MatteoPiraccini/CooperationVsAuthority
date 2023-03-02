@@ -70,7 +70,7 @@ def analize_simulations(all_data):
         
     mean_strategy=np.mean(stat_strategies, 1, np.float32)
     
-    stat_strategies.tofile('stat_strategy.csv',sep=',',format='%10.5f')
+    np.savetxt('Results.csv', stat_strategies, delimiter=',',fmt='%10.5f')
         
     return stat_strategies, mean_strategy
     

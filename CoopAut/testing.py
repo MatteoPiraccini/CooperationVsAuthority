@@ -247,4 +247,20 @@ def try_to_import():
         
         ls_parameters.append(tupla)
     
-    print(ls_parameters)  
+    print(ls_parameters)
+    
+def testing_simulation():
+    
+    fake_par=(100, 125, 10000, False, False, 10 )
+    
+    populations=np.array(sm.init_simulation(fake_par[0]), np.byte) # cercare di eliminarlo
+
+    data_list=(sm.evolution(fake_par[1], fake_par[2], populations))
+    
+    print(data_list)
+    
+def test_export():
+    
+    fake_data= np.ones((2,10))
+    
+    np.savetxt('Prova.csv', fake_data, delimiter=',',fmt='%10.5f')
