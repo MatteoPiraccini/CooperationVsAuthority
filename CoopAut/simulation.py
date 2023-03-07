@@ -31,11 +31,11 @@ def init_simulation(population_size): # che parametri ci vanno? Probabilmente qu
     #pop_count_type = np.array(count_population(population[0]))	
 
     return population
-
-	########################################da rifare la le strutture dati siccome np.array è omogeneo quindi serve già una lista oppure la lista è fuori e copia i dati
 		
 
 def random_int(low_value, high_value, size, dtype=np.byte):# tengo la generazione randomica separate per il testing
+    
+    np.random.seed(1)
     
     return np.random.randint(low_value, high_value, size, dtype)
 
@@ -49,7 +49,7 @@ def avoid_repetition(array_to_test):
     return np.array_equal(a,b)
 
    
-def interaction(donator, recipient, onlookers, strategy_array, sources_array, image_matrix):
+def interaction(donator, recipient, onlookers, strategy_array, sources_array, image_matrix, punishment, reward, controls):
     
     """
 
@@ -91,13 +91,29 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
         sources_array[recipient]+=1
         
         #print(donator, 'ha cooperato con', recipient )
+  
+    if (np.any(controls==recipient) | np.any(controls==donator)):
+        
+        
+        if (punishment & (bonus == -1) &  sources_array[donator]>0):
+            
+            sources_array[donator]+=bonus
+            
+            image_matrix[:,donator]+=bonus
+            
+        if (reward & (bonus == 1)):
+            
+            sources_array[donator]+=bonus
+            
+            image_matrix[:,donator]+=bonus
+            
+    else:
+        
+        image_matrix[recipient][donator]+=bonus
+        
+        for x in range(len(onlookers)):
 
-		
-    image_matrix[recipient][donator]+=bonus
-    
-    for x in range(len(onlookers)):
-
-        image_matrix[onlookers[x]][donator]+=bonus
+            image_matrix[onlookers[x]][donator]+=bonus
         
     #print('La reputazione di ', donator, 'è cambiata di', bonus, 'per', recipient, onlookers)
 
@@ -179,7 +195,7 @@ def new_generation(strategy, sources):
     return new_strategy
             
     
-def life_cycle(strategy, n_interactions):
+def life_cycle(strategy, N_interactions, punishment, reward, N_controls):
     
     """
     Implemantation of a life cycle of a generation with ten encounters
@@ -203,29 +219,37 @@ def life_cycle(strategy, n_interactions):
     Return
     
     """
-    #print(strategy,)
     
     population_size=len(strategy)
     
-    image_matrix = np.zeros((population_size,population_size), np.byte)
+    image_matrix = np.zeros((population_size, population_size), np.byte)
     
     sources = np.zeros_like(strategy, np.byte)
     
-    population_size=len(strategy)
+    population_indexes=np.arange(population_size)
     
-    x=0
-              
-    while x<n_interactions: #125 interactions
+    for x in range(N_interactions):
+        
+        DRandO= np.random.choice(population_indexes, 12, False)
+        
+        controls= np.random.choice(population_indexes, 10, False)
+        
+        interaction(DRandO[0], DRandO[1], DRandO[-10:], strategy, sources, image_matrix, punishment, reward, controls)
+        
+    #x=0         
+    #while x<N_interactions:
               
         #DRandO = Donator, Recipient and Onlookers
               
-        DRandO=random_int( 0, population_size, 12, np.byte)
+        #DRandO=random_int( 0, population_size, 12, np.ubyte)
+        
+        #controls=random_int(0, population_size, N_controls, np.ubyte)
               
-        if avoid_repetition(DRandO):
+        #if (avoid_repetition(DRandO) & avoid_repetition(controls)):
                   
-            x+=1
+            #x+=1
             
-            interaction(DRandO[0], DRandO[1], DRandO[-10:], strategy, sources, image_matrix)
+            #interaction(DRandO[0], DRandO[1], DRandO[-10:], strategy, sources, image_matrix)
             
     #print(sources, image_matrix, sep='\n')
     
@@ -235,7 +259,7 @@ def life_cycle(strategy, n_interactions):
     
     return old_sources, new_population #le risorse sono della vecchia generazione
 
-def evolution(N_interactions, N_generation, populations):
+def evolution(N_interactions, N_generation, populations, punishment, reward, controls):
     
     """
     Evolution of the various generations
@@ -263,12 +287,14 @@ def evolution(N_interactions, N_generation, populations):
     
     for generation in range(N_generation):
         
-        old_sources, new_strategies = np.array(life_cycle(strategy, N_interactions), np.byte)
+        old_sources, new_strategies = np.array(life_cycle(strategy, N_interactions, punishment, reward, controls), np.byte)
         
         populations[generation][1]= old_sources
         
         new_population = np.vstack((new_strategies, np.zeros_like(new_strategies)), dtype=np.byte)
         
         populations=np.append(populations, [new_population], axis=0)
+        
+        print('Generazione', generation)
         
     return populations

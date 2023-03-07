@@ -16,11 +16,15 @@ import plot
 
 def main():
     
-    csv=np.genfromtxt('https://raw.githubusercontent.com/MatteoPiraccini/CooperationVsAuthority/main/Parameters.csv', delimiter=',', skip_header=1)
+    csv=np.genfromtxt('Parameters.csv', delimiter=',', skip_header=1, ndmin=2)
+    
+    # non si aggiorna, crea cartella e crea il file, che poi ripesca sempre
     
     print(csv)
     
     ls_parameters=[]
+    
+    print(len(csv)) #se metti una sola riga dopo ti dà gli elementi della riga
     
     # max parameters : 255, 255
     
@@ -42,13 +46,14 @@ def main():
         
     par = tuple(ls_parameters)
 
-    data_list=[] #cercare di spostarla in simulation
+    data_list=[]
+    
 
     for n_simulation in range(len(par)):
         
         populations=np.array(sm.init_simulation(par[n_simulation][0]), np.byte) # cercare di eliminarlo
     
-        data_list.append((sm.evolution(par[n_simulation][1], par[n_simulation][2], populations)))
+        data_list.append((sm.evolution(par[n_simulation][1], par[n_simulation][2], populations, par[n_simulation][3], par[n_simulation][4], par[n_simulation][5])))
 
     data=np.array(data_list)
 

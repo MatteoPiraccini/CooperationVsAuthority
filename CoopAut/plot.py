@@ -6,11 +6,7 @@ plt.rcParams["axes.grid.axis"] ="y"
 
 import numpy as np
 
-from matplotlib import colors
-
 def reorganize_data(data):
-    
-    print(np.shape(data))
     
     re_data = np.hsplit(data, np.array([7, 12]))
     
@@ -40,6 +36,10 @@ def draw_data(data, par):
     
     data=reorganize_data(data)
     
+    if np.shape(data) == (12,):
+        
+        data=[data]
+    
     rows = int(np.ceil(len(data)/3))
 
     fig, axs = plt.subplots(rows , 3, sharey=True, tight_layout=True)
@@ -51,7 +51,11 @@ def draw_data(data, par):
     string=''
     
     n_simulation=0
-       
+    
+    if rows == 1:
+    
+        axs=[axs]
+    
     for row in range(rows):
         
         for column in range(3):
@@ -82,7 +86,7 @@ def draw_data(data, par):
             
             n_simulation+=1
             
-    plt.title()
+    plt.title(label='Results')
         
     plt.show()  
         

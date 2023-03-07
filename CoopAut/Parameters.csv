@@ -1,0 +1,2 @@
+﻿'size_population' range: 12-255,'interactions' range: 1-255,'generations' range: 1-255,'punishment' True/False,'reward' True/False,'controls' range: 1-size_population
+100,125,10001,1,1,100

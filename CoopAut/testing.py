@@ -24,7 +24,7 @@ def testing_init():
 
 def random_int(low_value, high_value, size, dtype):# generazione randomica per il testing
 
-    np.random.seed(5)
+    np.random.seed(11)
 
     return np.random.randint(low_value, high_value, size, dtype)
 
@@ -49,12 +49,8 @@ def testing_count(min,max):
 def testing_interaction():
 
     size_pop=20
-
-    fake_indexes=np.random.randint(0,size_pop, 12, np.byte)
     
-    while not sm.avoid_repetition(fake_indexes):
-        
-        fake_indexes=np.random.randint(0,size_pop, 12, np.byte)
+    fake_indexes= np.random.choice(np.arange(size_pop), 12, False)
 
     strategy=np.array(random_int(-5,7,size_pop, dtype=np.byte))
 
@@ -68,7 +64,7 @@ def testing_interaction():
     
     print(image[:, fake_indexes[0]])
 	
-    sm.interaction( fake_indexes[0], fake_indexes[1], fake_indexes[-10:], strategy, sources, image)
+    sm.interaction( fake_indexes[0], fake_indexes[1], fake_indexes[-10:], strategy, sources, image, True, True, [])
 
     
     print(sources, 
@@ -126,13 +122,11 @@ def testing_life_cycle():
     
     # no valore negativi all'image score
     
-    size=100
+    size=20
     
     fake_population=[sm.random_int(-5, 7, size, np.byte), np.array(sm.random_int(0, 7, size, np.byte), np.byte)]
     
-    fake_image=np.zeros((size,size), np.byte)
-    
-    print(sm.life_cycle(fake_population, fake_image, n_interactions= 125))
+    print(sm.life_cycle(fake_population, 3, False, True, 10))
     
 def not_a_mess_with_append():
     
