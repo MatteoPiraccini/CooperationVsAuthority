@@ -23,6 +23,6 @@ Create the dataframe of the frequencies of strategies for all the simulations an
 
 Returns:
         
- * stat_strategies: array (N of simulations, 12), frequencies of strategies in all simulation
+ + stat_strategies: array (N of simulations, 12), frequencies of strategies in all simulation
     
- * mean_strategy: array (N of simulations), mean strategiy of each simulations
+ + mean_strategy: array (N of simulations), mean strategiy of each simulations
