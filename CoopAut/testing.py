@@ -6,15 +6,13 @@ import analysis as an
 
 import plot
 
-import pandas as pd
-
 # ricontrolare tutto, togliere tutti i print e i return, inserire if-else al posto di assertion e togliere la roba su dimensionalità
 # riguardare pagina esame
 
 def testing_init():
 	# just a visual check
     
-	arrays_tupla=sm.init_simulation()
+	arrays_tupla=sm.init_simulation(100)
     
 	print(arrays_tupla)
     
@@ -245,11 +243,13 @@ def try_to_import():
     
 def testing_simulation():
     
-    fake_par=(100, 125, 10000, False, False, 10 )
+    fake_par=(20, 0, 2, False, False, 10 )
     
-    populations=np.array(sm.init_simulation(fake_par[0]), np.byte) # cercare di eliminarlo
+    populations=sm.init_simulation(fake_par[0])
+    
+    print(populations)
 
-    data_list=(sm.evolution(fake_par[1], fake_par[2], populations))
+    data_list=(sm.evolution(fake_par[1], fake_par[2], populations, fake_par[3], fake_par[4], fake_par[5]))
     
     print(data_list)
     

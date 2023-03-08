@@ -1,88 +1,128 @@
 import numpy as np
+ 
 
-# implementare l'interruttore per attivare i controlli e quanto frequenti
-
-# 
 
 def init_simulation(population_size): # che parametri ci vanno? Probabilmente questa funzione è inutile
 
     """
 
-    Create the 0-generation
+    Create the 0-generation with casual strategies and zero sources
 
     Parameters:
 
     -----------------------------
+    
+    population_size: integer, indicate numerosity of the population
 	
     -----------------------------
 
-    Returns a tupla with a 3D array with data about the 0-generation, the matrix of reputation and an array that store the amount of every types of individual
+    Return an array with dimension (1,2,size_population), there will be store data
 	
     """
 
-	#creation of the 0-generation
 
-    population=np.zeros((1,2,population_size), np.byte) # 1°-dim: generation, 2°-dim: strategy/sources, 3°-dim: individual
+    population=np.zeros((1,2,population_size), np.byte) 
 	
-    population[0][0] = np.array(random_int(-5, +7, (1, population_size), np.byte)) #7 is excluse from the random number
-
-	#setup the matrix that will count the amount of every type related to generation
-
-    #pop_count_type = np.array(count_population(population[0]))	
+    population[0][0] = np.array(random_int(-5, +7, (1, population_size), np.byte)) 
 
     return population
-		
 
-def random_int(low_value, high_value, size, dtype=np.byte):# tengo la generazione randomica separate per il testing
+		
+# this function is for separate stochastic part from the deterministic one of
+# the simulation for testing
+
+def random_int(low_value, high_value, size, dtype=np.byte):
     
-    np.random.seed(1)
+    """
+
+    Generate an array of random int
+
+    Parameters:
+
+    -----------------------------
+        
+    low_value: int, inferior value (included)
+        
+    high_value: int, superior value (excluded)
+        
+    size: int, how many values must be generate and what shape
+        
+    dtype: type of the generated values, by default is np.byte
+    	
+    -----------------------------
+
+    Return an array with dimension (shape) with casual int values from
+    
+    [low_value, high_value)
+    	
+    """
+    # to testing the same number
+    
+    #np.random.seed(1)
     
     return np.random.randint(low_value, high_value, size, dtype)
 
-
-def avoid_repetition(array_to_test):
-    
-    a=np.unique(array_to_test, return_counts=True)[1]
-          
-    b=np.ones_like(a)
-          
-    return np.array_equal(a,b)
-
    
-def interaction(donator, recipient, onlookers, strategy_array, sources_array, image_matrix, punishment, reward, controls):
+def interaction(donator, recipient, onlookers, 
+                
+                strategy_array, sources_array, image_matrix, 
+                
+                punishment, reward, controls):
     
     """
 
-    A pair of individuals, donator-reipient, interact and donator decide whether cooperate
+    Simulation of a pair of individuals, donator-reipient, interact and donator 
+    
+    decide whether cooperate
 
     Parameters:
 
     -----------------------------
 	
-    donator: the index that rappresent an individual from the population that could cooperate
-
-    recipient: the index that rappresent an individual from the population that maybe receive
-
-    onlookers: an array 1x10 of indexes of indivuals that observe the interaction
-
-    strategy_array: an array 1x100 with the strategies for each individuals
-
-    sources_array: an array 1x100 with the sources for each individuals
-
-    image_matrix: a matrix 100x100 with the image of each individuals (row) about other individuals (column)
+    donator: int, index that rappresent an individual from the population that 
     
-    
-    
-    ###Returns a tupla with the updated population_array and the updated reputation_matrix
+    could cooperate
 
+    recipient: int, index that rappresent an individual from the population that
+    
+    maybe receive
+
+    onlookers: array (1,10), indexes of indivuals that observe the 
+    
+    interaction
+
+    strategy_array: array (1, size of population), the strategies for 
+    
+    each individuals
+
+    sources_array: array (1, size of population), the sources for each 
+    
+    individuals
+
+    image_matrix: array (size of poplutation)**2, matrix of image scores
+    
+    punishment: bool, to indicate if punishment is on
+    
+    reward: bool, to indicate if punishment is on
+    
+    controls: array 1-D, indexes of the people controlled
+    
     -----------------------------
-
+    
+    Return nothing.
     
     """
-     
+    # no sense controls without a consequence
+    
+    if np.logical_not(punishment | reward):
+        
+        controls = []
+    
+    # by default donator not cooperate
+    
     bonus=-1
     
-    #print(strategy_array[donator], '>=', image_matrix[donator][recipient], '?')
+    # controls if donator cooperate
 
     if strategy_array[donator]>=image_matrix[donator][recipient]:
 		
@@ -90,10 +130,13 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 
         sources_array[recipient]+=1
         
-        #print(donator, 'ha cooperato con', recipient )
+    #apply consequences of the choice of donator
+    
+    # the controls effects are here to simplify the code, no theorical reason
   
     if (np.any(controls==recipient) | np.any(controls==donator)):
         
+        #the source cannot be a negative value
         
         if (punishment & (bonus == -1) &  sources_array[donator]>0):
             
@@ -106,7 +149,11 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
             sources_array[donator]+=bonus
             
             image_matrix[:,donator]+=bonus
-            
+    
+    # if controls catch no one, the consequences are limitated only to a 
+    
+    #restricted group
+       
     else:
         
         image_matrix[recipient][donator]+=bonus
@@ -115,9 +162,7 @@ def interaction(donator, recipient, onlookers, strategy_array, sources_array, im
 
             image_matrix[onlookers[x]][donator]+=bonus
         
-    #print('La reputazione di ', donator, 'è cambiata di', bonus, 'per', recipient, onlookers)
 
-    ###return (sources_array, image_matrix) (vale tenerlo con variabile locale?)
 
 def new_generation(strategy, sources):
     
@@ -125,139 +170,145 @@ def new_generation(strategy, sources):
     """
     Creation of the next generation; each indivuals has an offspring
     
-    based on its sources. Explain procedure. So no risk of outrange
+    based on its sources.
     
     Parameters:
         
     -----------------------------
         
-    strategy: 1x100 array with the strategy of each individual
+    strategy: array (1, size of population), strategy of each individual
     
-    sources: 1x100 array with the sources of each individual
+    sources: array (1, size of population), sources of each individual
     
-    
-    
-    Return the array of the strategies of the individual of the new 
-    
-    generation 
-
     -----------------------------
     
-
+    Return an array (1, size of population) of the strategies of the individual 
     
+    of the new generation 
+   
     """
     
     tot_sources=np.sum(sources)
     
-    tot_pop=len(strategy) #total number of individuals
+    # if nothing change
+    
+    if tot_sources==0:
         
-    inv_tot_sources=np.float16(1/tot_sources) #save time
+        return strategy
+    
+    # to count the total number of individuals
+    
+    tot_pop=len(strategy) 
+    
+    # to save time later by not using /
+        
+    inv_tot_sources=np.float16(1/tot_sources)
+    
+    #in this array will be store the strategies of the new generation
     
     new_strategy=np.array([], dtype=np.byte)
-    
-    # array con le proporzioni dei pay-off
     
     proportions = np.float16(sources*inv_tot_sources)
     
     offspring = np.float16(tot_pop*proportions)
     
-    #print(offspring)
+    # integers and fractional parts of the proportions need a separate treatment
+    # for the calculus of the offsprings
     
     frac_offspring = np.array(np.modf(offspring)[0], np.float16)
     
     int_offspring = np.array(np.modf(offspring)[1], np.byte)
     
-    #print(frac_offspring)
-    
-    #print(int_offspring)
-    
     for individual in range(tot_pop):
         
-        appendix=np.full(int_offspring[individual], strategy[individual], np.byte)
+        appendix = np.full(int_offspring[individual], strategy[individual], np.byte)
                
-        new_strategy=np.append(new_strategy, appendix)
-
+        new_strategy = np.append(new_strategy, appendix)
+        
+    # add strategies based on the fractional part
 
     while len(new_strategy) < tot_pop:
         
-        # search the highest value among the frac_offspring
-        
         appendix= strategy[np.argmax(frac_offspring)]
         
-        new_strategy=np.append(new_strategy, appendix)
+        new_strategy = np.append(new_strategy, appendix)
         
-        frac_offspring[np.argmax(frac_offspring)]=0
+        frac_offspring[np.argmax(frac_offspring)] = 0
         
-    #print(new_strategy)
+    # make the distrubution of strategies random
         
     np.random.shuffle(new_strategy)
             
     return new_strategy
             
     
-def life_cycle(strategy, N_interactions, punishment, reward, N_controls):
+def life_cycle(population, N_interactions, punishment, reward, N_controls):
+    
     
     """
-    Implemantation of a life cycle of a generation with ten encounters
+    Implemantation of a life cycle of a generation with interactions and 
     
-    and the arise of the next generation based on sources
+    the arise of the next generation based on sources
     
     Parameters:
     
     -----------------------------
     
-    population: a 2x100 array with strategy (0-row) and sources (1-row) of
+    population: array (2, size of population), strategy (0-row) and sources (1-row) of
     
     each individuals
     
-    image_matrix: a 100x100 matrix with the image scores of each individuals
+    N_interactions: int, how many interactions are iterated
     
-    (0-row) about the others (1-row)
+    punishment: bool, to indicate if punishment is on
+        
+    reward: bool, to indicate if punishment is off
+    
+    N_controls: int, number of individual to be controled for each interaction
     
     -----------------------------
     
-    Return
+    Return two arrays (size of population), first with the sources of the 
+    
+    old generation, the other with strategies of the new one
     
     """
     
-    population_size=len(strategy)
+    strategy = population[0]
+    
+    population_size = len(population[0])
+
+    # new image scores matrix for each generation
     
     image_matrix = np.zeros((population_size, population_size), np.byte)
     
+    # new sources array for each generation
+    
     sources = np.zeros_like(strategy, np.byte)
     
-    population_indexes=np.arange(population_size)
+    # create an array with all indexes for the next choice functions
+    
+    population_indexes = np.arange(population_size)
     
     for x in range(N_interactions):
         
-        DRandO= np.random.choice(population_indexes, 12, False)
+        #DRandO = Donator, Recipient and Onlookers
         
-        controls= np.random.choice(population_indexes, 10, False)
+        DRandO = np.random.choice(population_indexes, 12, False)
+        
+        controls = np.random.choice(population_indexes, N_controls, False)
         
         interaction(DRandO[0], DRandO[1], DRandO[-10:], strategy, sources, image_matrix, punishment, reward, controls)
-        
-    #x=0         
-    #while x<N_interactions:
-              
-        #DRandO = Donator, Recipient and Onlookers
-              
-        #DRandO=random_int( 0, population_size, 12, np.ubyte)
-        
-        #controls=random_int(0, population_size, N_controls, np.ubyte)
-              
-        #if (avoid_repetition(DRandO) & avoid_repetition(controls)):
-                  
-            #x+=1
-            
-            #interaction(DRandO[0], DRandO[1], DRandO[-10:], strategy, sources, image_matrix)
-            
-    #print(sources, image_matrix, sep='\n')
+    
+    # useful for further implentation
     
     old_sources=np.array(sources)
     
-    new_population=new_generation(strategy, sources)
+    new_population = new_generation(strategy, sources)
     
-    return old_sources, new_population #le risorse sono della vecchia generazione
+    return old_sources, new_population
+
+
 
 def evolution(N_interactions, N_generation, populations, punishment, reward, controls):
     
@@ -268,32 +319,41 @@ def evolution(N_interactions, N_generation, populations, punishment, reward, con
     
     -----------------------------
     
-    n_generation: numero di generazione
+    N_interactions: int, how many interactions are iterated
     
-    n_interactions: numero di interazioni in ogni life cycle
+    N_generation: int, how many generations are iterated
     
-    population: populations[generazione][strategie/risorse finali][individui]
-    
-    shape iniziale (1,2,size of population)
+    populations: array (2, size of population), strategy (0-row) and sources (1-row) of
+
+    of the 0-generation
+   
+    punishment: bool, to indicate if punishment is on
+       
+    reward: bool, to indicate if punishment is off
+   
+    N_controls: int, number of individuals to be controled for each interaction
     
     -----------------------------
     
-    Return the data
+    Return array (N_generation, 2, size of population) with strategies and
+    
+    sources for each generation
     
     """  
-    
     
     strategy = populations[0][0]
     
     for generation in range(N_generation):
         
-        old_sources, new_strategies = np.array(life_cycle(strategy, N_interactions, punishment, reward, controls), np.byte)
+        old_sources, new_strategies = np.array(life_cycle(populations[generation], N_interactions, punishment, reward, controls), np.byte)
         
-        populations[generation][1]= old_sources
+        populations[generation][1] = old_sources
         
         new_population = np.vstack((new_strategies, np.zeros_like(new_strategies)), dtype=np.byte)
         
         populations=np.append(populations, [new_population], axis=0)
+        
+        # visual aid to understand how proceed
         
         print('Generazione', generation)
         

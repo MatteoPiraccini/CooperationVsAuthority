@@ -1,12 +1,34 @@
 import matplotlib.pyplot as plt
 
+# to show only the grid for vertical axe
+
 plt.rcParams["axes.grid"] =True
 
 plt.rcParams["axes.grid.axis"] ="y"
 
 import numpy as np
 
+
+# frequencies of the strategies are stored in such way: 0 1 2 3 4 5 6 -5 -4 -3 -2 -1
+# for the plot we need this way: -5 -4 -3 -2 -1 0 1 2 3 4 5 6
+
 def reorganize_data(data):
+    
+    """
+
+    Split and rearrange the array of frenquencies
+
+    Parameters:
+
+    -----------------------------
+	
+    data: array (N of simulations, 12), frequencies
+    
+    -----------------------------
+
+    Returns an array (N of simulations, 12) rearrange
+	
+    """
     
     re_data = np.hsplit(data, np.array([7, 12]))
     
@@ -18,27 +40,30 @@ def draw_data(data, par):
     
     """
 
-    Create the 0-generation
+    Generate a series of plot with the frequencies of strategies
 
     Parameters:
 
     -----------------------------
 	
-    data: an array with the frequencies of strategies in each simulation
+    data: array (N of simulations, 12), frequencies
     
     -----------------------------
 
-    Returns a tupla with a 3D array with data about the 0-generation, the matrix of reputation and an array that store the amount of every types of individual
 	
     """
     
-    # for a better readibility
+    # for a better readibility on the plot
     
-    data=reorganize_data(data)
+    data = reorganize_data(data)
+    
+    # we need always a 2D array
     
     if np.shape(data) == (12,):
         
         data=[data]
+        
+    # on a row we want most three subplot
     
     rows = int(np.ceil(len(data)/3))
 
@@ -46,11 +71,13 @@ def draw_data(data, par):
     
     plt.xticks(np.arange(-4,7,2 ))
     
-    plt.yticks(np.arange(0.0, 0.35, 0.05))
+    plt.yticks(np.arange(0.0, 0.95, 0.05))
     
     string=''
     
     n_simulation=0
+    
+    # we always need a 2D axs
     
     if rows == 1:
     
