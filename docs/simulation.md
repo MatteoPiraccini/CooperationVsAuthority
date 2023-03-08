@@ -30,7 +30,11 @@ Generate an array of random int
 Return an array (size) with casual int values from [low_value, high_value)
 
 
-## `interaction(donator, recipient, onlookers, strategy_array, sources_array, image_matrix, punishment, reward, controls):`
+## `interaction(donator, recipient, onlookers, 
+                
+                strategy_array, sources_array, image_matrix, 
+                
+                punishment, reward, controls):`
 
 Simulation of a pair of individuals, donator-reipient, interact and donator decide whether cooperate
 
@@ -110,10 +114,5 @@ Evolution of the various generations.
 -N_controls: int, number of individuals to be controled for each interaction
 
     
-Return array (N_generation, 2, size of population) with strategies and
-    
-    sources for each generation
-
-
-## ``
+Return an array (N_generation, 2, size of population) with strategies and sources for each generation
 

@@ -63,7 +63,7 @@ def analize_simulations(all_data):
         
     stat_strategies: array (N of simulations, 12), frequencies of strategies in all simulation
     
-    mean_strategy: array (N of simulations), mean strategies of every simulations
+    mean_strategy: array (N of simulations), mean strategy of each simulations
     """
     
     N_simulation = len(all_data)

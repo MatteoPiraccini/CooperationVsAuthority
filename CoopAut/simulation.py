@@ -324,11 +324,11 @@ def evolution(N_interactions, N_generation, populations, punishment, reward, con
     
     populations: array (2, size of population), strategy (0-row) and sources (1-row) of
 
-    of the 0-generation
+    the 0-generation
    
     punishment: bool, to indicate if punishment is on
        
-    reward: bool, to indicate if punishment is off
+    reward: bool, to indicate if punishment is on
    
     N_controls: int, number of individuals to be controled for each interaction
     
