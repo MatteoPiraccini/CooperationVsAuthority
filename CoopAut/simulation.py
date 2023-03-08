@@ -1,8 +1,7 @@
 import numpy as np
  
 
-
-def init_simulation(population_size): # che parametri ci vanno? Probabilmente questa funzione è inutile
+def init_simulation(population_size):
 
     """
 
@@ -12,7 +11,7 @@ def init_simulation(population_size): # che parametri ci vanno? Probabilmente qu
 
     -----------------------------
     
-    population_size: integer, indicate numerosity of the population
+    population_size: int, indicate numerosity of the population
 	
     -----------------------------
 
@@ -340,9 +339,7 @@ def evolution(N_interactions, N_generation, populations, punishment, reward, con
     sources for each generation
     
     """  
-    
-    strategy = populations[0][0]
-    
+
     for generation in range(N_generation):
         
         old_sources, new_strategies = np.array(life_cycle(populations[generation], N_interactions, punishment, reward, controls), np.byte)

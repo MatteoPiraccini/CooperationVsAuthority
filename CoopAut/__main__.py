@@ -6,23 +6,49 @@ import analysis as an
 
 import plot
 
-# parameters format = size_population, #interactions(unico parametro per tutti), #generations(unico parametro per tutti), Punishment, Reward, #controls
+# parameters format = size_population, N_interactions, N_generations, Punishment, Reward, N_controls
 
-# confrontare frequenze con popolazione fissa e le varie combo di controlli
-#(punire, premiare, entrambi, variare il numero di controlli)
-# poi provare con differenti quantità di popolazioni e interazioni
-# togliere varaibili globali
+# check if the values of parameters are accetable
+
+def check_parameters(parameters):
+    
+    for i in range (len(parameters)):
+        
+        if (parameters[i][0] < 12) | (parameters[i][0] > 255):
+            
+            raise ValueError (" size_population is out of range")
+            
+        if (parameters[i][1] < 1) | (parameters[i][1] > 255):
+            
+            raise ValueError (" N_interactions is out of range")
+            
+        if (parameters[i][2] < 1) | (parameters[i][2] > 255):
+            
+            raise ValueError (" N_generations is out of range")
+            
+        if (parameters[i][5] < 0) | (parameters[i][0] > parameters[i][0]):
+            
+            raise ValueError (" N_controls is out of range")
+            
+            
 
 def main():
     
-    csv=np.genfromtxt('Parameters.csv', delimiter=',', skip_header=1, ndmin=2)
+    """
     
-    ls_parameters=[]
+    The program start here. Call this function if you want to start
     
-
+    """
+    
+    csv = np.genfromtxt('Parameters.csv', delimiter=',', skip_header=1, ndmin=2)
+    
+    check_parameters(csv)
+    
+    ls_parameters = []
+    
     for n_simulation in range(len(csv)):
         
-        row=(np.ubyte(csv[n_simulation][0]), # size of population
+        row = (np.ubyte(csv[n_simulation][0]), # size of population
                                                 
                np.ubyte(csv[n_simulation][1]), # N of interactions
                                                 
@@ -36,21 +62,25 @@ def main():
         
         ls_parameters.append(row)
         
+    # to fix parameters
+        
     par = tuple(ls_parameters)
+    
 
-    data_list=[] 
+
+    data_list = [] 
 
     for n_simulation in range(len(par)):
         
         # 1°-dim: generation, 2°-dim: strategy/sources, 3°-dim: individual
         
-        populations=np.array(sm.init_simulation(par[n_simulation][0]), np.byte) # cercare di eliminarlo
+        populations = np.array(sm.init_simulation(par[n_simulation][0]), np.byte) # cercare di eliminarlo
     
         data_list.append((sm.evolution(par[n_simulation][1], par[n_simulation][2], populations, par[n_simulation][3], par[n_simulation][4], par[n_simulation][5])))
 
-    data=np.array(data_list)
+    data = np.array(data_list)
 
-    results=an.analize_simulations(data)
+    results = an.analize_simulations(data)
 
 
     plot.draw_data(results[0], par)
