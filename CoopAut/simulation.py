@@ -30,7 +30,7 @@ def init_simulation(population_size):
 # this function is for separate stochastic part from the deterministic one of
 # the simulation for testing
 
-def random_int(low_value, high_value, size, dtype=np.byte):
+def random_int(low_value, high_value, shape, dtype=np.byte):
     
     """
 
@@ -44,7 +44,7 @@ def random_int(low_value, high_value, size, dtype=np.byte):
         
     high_value: int, superior value (excluded)
         
-    size: int, how many values must be generate and what shape
+    shape: int, shape of the values generated
         
     dtype: type of the generated values, by default is np.byte
     	
@@ -59,7 +59,7 @@ def random_int(low_value, high_value, size, dtype=np.byte):
     
     #np.random.seed(1)
     
-    return np.random.randint(low_value, high_value, size, dtype)
+    return np.random.randint(low_value, high_value, shape, dtype)
 
    
 def interaction(donator, recipient, onlookers, 
@@ -261,7 +261,7 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls):
     
     punishment: bool, to indicate if punishment is on
         
-    reward: bool, to indicate if punishment is off
+    reward: bool, to indicate if punishment is on
     
     N_controls: int, number of individual to be controled for each interaction
     
