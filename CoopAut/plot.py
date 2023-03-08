@@ -40,7 +40,7 @@ def draw_data(data, par):
     
     """
 
-    Generate a series of plot with the frequencies of strategies
+    Generate a series of stem plot with the frequencies of strategies
 
     Parameters:
 

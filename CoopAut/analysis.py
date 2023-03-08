@@ -5,7 +5,7 @@ def frequency_strategies(data_simulation):
     
     """
 
-    Calculus of the frequencies of strategies for a simulation
+    Computation of the frequencies of strategies for a simulation
 
     Parameters:
 
@@ -48,6 +48,8 @@ def analize_simulations(all_data):
     """
 
     Create the dataframe of the frequencies of strategies for all the simulations
+    
+    and save the mean strategy into a file csv located in the same directory
 
     Parameters:
 
