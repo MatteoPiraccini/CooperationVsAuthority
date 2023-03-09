@@ -20,3 +20,34 @@ For each simulation, one could decide if the authority will be punishing, reward
 During the interations some individuals will be controlled. Nothing happen until one of this is the donator or the recipient. In that case, if the the authority is punishing, it will punish the donator that not cooperate by decrease by one his sources and the image score of all the onthers individuals about him. Viceversa, if donator cooperate and the authority is rewarding, it will be rewarded by increase by one his sources and the image score of all the onthers individuals about him.
 
 ## How to use
+
+First yuo have to download the repository.
+
+Then check if you satisfy all requirements in `requirements.txt`
+
+After that you have to give parameters for your programe.
+
+Move to the subdirectory CoopAut. Here there is the `Parameters.csv`. In this csv file every writed line is a simulation, except for the first one. The first one is ignored by the program, it contains how are structured the data and what values are valid.
+For each simulation that you want to perform you must write a line. The template for one simulation is
+
+```
+size_population,N_interactions,N_generations,punishment,reward,controls
+```
+
+For more simulation in the same run
+
+```
+size_population1,N_interactions1,N_generations1,punishment1,reward1,controls1
+size_population2,N_interactions2,N_generations2,punishment2,reward2,controls2
+size_population3,N_interactions3,N_generations3,punishment3,reward3,controls3
+...
+```
+
+#### Parameters
+
+-size_population: int, range: 12-255, how much individuals in each generation
+-N_interactions: int, range: 1-255, how much interactions in each genearation
+-N_generations: int, range: 1-255, how much generations in the simulation
+-punishment: True/False, presence/absence of a punishing authority
+-reward: True/False, presence/absence of a punishing authority
+-controls: int, range: 1-size_population, how much individual are checked by the authority

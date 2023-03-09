@@ -352,6 +352,6 @@ def evolution(N_interactions, N_generation, populations, punishment, reward, con
         
         # visual aid to understand how proceed
         
-        print('Generazione', generation)
+        #print('Generazione', generation)
         
     return populations

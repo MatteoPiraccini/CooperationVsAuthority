@@ -1,11 +1,6 @@
-## __main__.py
+## start.py
 
-This library is to start and to manage all the execution of the code.
-
-
-## `main()`
-
-Call this functions if you want to start the program
+As you call this script, the programe start.
 
 First it extract value from the file `Parameters.csv` in the same directory. Then for each simulation it recall 
 `simulation.py` and store the data in 'data_list'. After that it pass perform the analysis of data by `analysis.py`. Finally it plot the strategy for each simulation.
