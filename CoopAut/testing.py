@@ -6,29 +6,48 @@ import analysis as an
 
 import plot
 
-# ricontrolare tutto, togliere tutti i print e i return, inserire if-else al posto di assertion e togliere la roba su dimensionalità
-# riguardare pagina esame
+#############################################
+##TEST for simulation.py
 
 def testing_init():
-	# just a visual check
-    
+	"""
+    This function is for testing the dimensionality sm.init_simulation()
+    """
+
 	arrays_tupla=sm.init_simulation(100)
     
 	print(arrays_tupla)
     
 	assert np.shape(arrays_tupla)==(1,2,100)
-    
-##### controllare la dimensionalità
 
-def random_int(low_value, high_value, size, dtype):# generazione randomica per il testing
+
+def random_int(low_value, high_value, size, dtype):
+    
+    """
+    This function is for generate fixed random number
+    
+    Parameters:
+
+    -----------------------------
+    low_value: int, inferior value (included)
+        
+    high_value: int, superior value (excluded)
+        
+    shape: int, shape of the values generated
+        
+    dtype: type of the generated values
+    -----------------------------
+    """
 
     np.random.seed(11)
 
     return np.random.randint(low_value, high_value, size, dtype)
 
+# this function tested a function that now is removed
 def testing_count(min,max):
-	# check if the counter work
-	
+	"""
+    This function is for testing if counter work
+    """
 	assert isinstance(min,int)
 
 	assert isinstance(max,int)
@@ -45,6 +64,10 @@ def testing_count(min,max):
 	
 
 def testing_interaction():
+    
+    """
+    This function is for testing sm.interaction()
+    """
 
     size_pop=20
     
@@ -76,15 +99,17 @@ def testing_interaction():
           image[:, fake_indexes[0]], 
           
           sep='\n')
-    
-    # work (apparently)
 
-
+# this is a test for a function now removed
 def testing_no_repeat():
+    
+    """
+    This function is for testing the sm.avoid_repetition()
+    """
 
-      x=0
+    x=0
       
-      while x<10:
+    while x<10:
       
         #DRandO = Donator, Recipient and Onlookers
       
@@ -100,7 +125,13 @@ def testing_no_repeat():
            
            print(DRandO)
 
+
 def testing_new_generation():
+    
+    """
+    This function is for testing sm.new_generation()
+    """
+
     
     fake_strategy=random_int(-5, 7, 10, np.byte)
     
@@ -115,10 +146,13 @@ def testing_new_generation():
     assert len(fake_strategy) == len(new_generation)
     
     print(new_generation)     
-           
+
+         
 def testing_life_cycle():
-    
-    # no valore negativi all'image score
+ 
+    """
+    This function is for testing sm.lifecycle()
+    """
     
     size=20
     
@@ -126,7 +160,95 @@ def testing_life_cycle():
     
     print(sm.life_cycle(fake_population, 3, False, True, 10))
     
+def testing_simulation():
+    
+    fake_par=(20, 0, 2, False, False, 10 )
+    
+    populations=sm.init_simulation(fake_par[0])
+    
+    print(populations)
+
+    data_list=(sm.evolution(fake_par[1], fake_par[2], populations, fake_par[3], fake_par[4], fake_par[5]))
+    
+    print(data_list)
+    
+    
+    
+#########################################################
+## TEST for analysis.py
+    
+def testing_an_strategy():
+    
+    """
+    This function is for testing analysis.py
+    
+    """
+    
+    fake_n_gen=3
+    
+    fake_size_pop=10
+    
+    fake_data= random_int(-5, 7, (fake_n_gen, 2, fake_size_pop), np.byte)
+    
+    print(fake_data)
+    
+    print(an.frequency_strategies(fake_data))
+    
+#########################################################
+## TEST for plot.py
+    
+def testing_plot():
+    
+    """
+    This function is for testing plot.draw_data.py
+    
+    """
+    
+    n_simulations=7
+    
+    fake_data=(np.random.uniform(0.0, 0.25, (n_simulations,12)))
+    
+    # ci vogliono i parametri
+    
+    ls=(2,3,4,True, False,2)
+    
+    parameters=()
+    
+    for i in range(n_simulations):
+        
+        parameters=(*parameters, ls)
+    
+    plot.draw_data(fake_data, parameters)
+    
+
+    
+def testing_reorganize():
+    
+    """
+    This function is for testing plot.reorganize_data()
+    
+    """
+    
+    fake_data=np.array([[0,1,2,3,4,5,6,-5,-4,-3,-2,-1] for i in range(10)])
+    
+    print(fake_data)
+    
+    print(plot.reorganize_data(fake_data))
+    
+    
+###########################################################
+## TEST for start.py
+
+
+    
 def not_a_mess_with_append():
+    
+    """
+    This function is for testing the behavior of append and if it work under a
+    
+    certain way
+    
+    """
     
     size=5
     
@@ -152,8 +274,14 @@ def not_a_mess_with_append():
     print(populations[1][0])
     
     print(populations[0][1])
+    
           
 def try_main():
+    
+    """
+    This function is for testing the code in start.py
+    
+    """
     
     n_generation=[2, 1] # esclusa la 0
 
@@ -175,45 +303,12 @@ def try_main():
     
     print(data)
     
-def testing_an_strategy():
-    
-    fake_n_gen=3
-    
-    fake_size_pop=10
-    
-    fake_data= random_int(-5, 7, (fake_n_gen, 2, fake_size_pop), np.byte)
-    
-    print(fake_data)
-    
-    print(an.frequency_strategies(fake_data))
-    
-def testing_plot():
-    
-    n_simulations=7
-    
-    fake_data=(np.random.uniform(0.0, 0.25, (n_simulations,12)))
-    
-    # ci vogliono i parametri
-    
-    ls=(2,3,4,True, False,2)
-    
-    parameters=()
-    
-    for i in range(n_simulations):
-        
-        parameters=(*parameters, ls)
-    
-    plot.draw_data(fake_data, parameters)
-    
-def testing_reorganize():
-    
-    fake_data=np.array([[0,1,2,3,4,5,6,-5,-4,-3,-2,-1] for i in range(10)])
-    
-    print(fake_data)
-    
-    print(plot.reorganize_data(fake_data))
-    
 def try_to_import():
+    
+    """
+    This function is for testing if the data for the parameters are imported correctly
+    
+    """
     
     csv=np.genfromtxt('https://raw.githubusercontent.com/MatteoPiraccini/CooperationVsAuthority/main/Parameters.csv', delimiter=',', skip_header=1)
     
@@ -241,19 +336,12 @@ def try_to_import():
     
     print(ls_parameters)
     
-def testing_simulation():
-    
-    fake_par=(20, 0, 2, False, False, 10 )
-    
-    populations=sm.init_simulation(fake_par[0])
-    
-    print(populations)
-
-    data_list=(sm.evolution(fake_par[1], fake_par[2], populations, fake_par[3], fake_par[4], fake_par[5]))
-    
-    print(data_list)
-    
 def test_export():
+    
+    """
+    This function is for testing export of data
+    
+    """
     
     fake_data= np.ones((2,10))
     

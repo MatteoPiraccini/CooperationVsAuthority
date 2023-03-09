@@ -46,8 +46,13 @@ size_population3,N_interactions3,N_generations3,punishment3,reward3,controls3
 #### Parameters
 
 -size_population: int, range: 12-255, how much individuals in each generation
+
 -N_interactions: int, range: 1-255, how much interactions in each genearation
+
 -N_generations: int, range: 1-255, how much generations in the simulation
+
 -punishment: True/False, presence/absence of a punishing authority
+
 -reward: True/False, presence/absence of a punishing authority
+
 -controls: int, range: 1-size_population, how much individual are checked by the authority
