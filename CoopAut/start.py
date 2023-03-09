@@ -103,6 +103,10 @@ data = np.array(data_list)
 
 results = an.analize_simulations(data)
 
+# save means into a file in the same directory
+
+np.savetxt('Results.csv', np.column_stack((results[0],results[1])), delimiter=',',fmt='%10.5f')
+
 
 plot.draw_data(results[0], par)
     
