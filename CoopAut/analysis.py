@@ -85,10 +85,7 @@ def analize_simulations(all_data):
     if np.shape(mean_strategy) == 1:
         
         mean_strategy=[mean_strategy]
-    
-    # save means into a file in the same directory
-    
-    np.savetxt('Results.csv', mean_strategy, delimiter=',',fmt='%10.5f')
+
         
     return stat_strategies, mean_strategy
     
