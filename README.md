@@ -21,13 +21,20 @@ During the interations some individuals will be controlled. Nothing happen until
 
 ## How to use
 
-First yuo have to download the repository.
+First you have to download the repository.
 
 Then check if you satisfy all requirements in `requirements.txt`
 
 After that you have to give parameters for your programe.
 
-Move to the subdirectory CoopAut. Here there is the `Parameters.csv`. In this csv file every writed line is a simulation, except for the first one. The first one is ignored by the program, it contains how are structured the data and what values are valid.
+Move to the subdirectory CoopAut. Here there is the `Parameters.csv`. Write the parameters for every simulation you want and save.
+
+Then run the file `start.py`
+
+
+### Parameters.csv
+
+In this csv file every writed line is a simulation, except for the first one. The first one is ignored by the program, it contains how are structured the data and what values are valid.
 For each simulation that you want to perform you must write a line. The template for one simulation is
 
 ```
