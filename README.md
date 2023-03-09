@@ -13,7 +13,7 @@ After some interactions a new generation arise. Each individuals of the old gene
 
 So it repeat for some amount of population
 
-### Differences respect the orginal model
+### Differences respect the original model
 
 In this project we had an unexplored topic about cooperation: authority.
 For each simulation, one could decide if the authority will be punishing, rewarding or both, and how much pervasive wuold be (how much individuals checks).
