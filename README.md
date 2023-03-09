@@ -62,4 +62,4 @@ size_population3,N_interactions3,N_generations3,punishment3,reward3,controls3
 
 -reward: True/False, presence/absence of a punishing authority
 
--controls: int, range: 1-size_population, how much individual are checked by the authority
+-controls: int, range: 1-size_population, how much individuals are checked by the authority
