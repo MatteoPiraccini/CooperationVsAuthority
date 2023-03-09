@@ -99,7 +99,7 @@ the donator will be controlled and rewarded.
 So the source_array would be
 
 0|1|...|3|...|7|...
----|---|---|---|---|---
+---|---|---|---|---|---|---
 0|0|...|1|...|1|...
 
 and the image_matrix
