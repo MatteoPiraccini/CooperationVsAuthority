@@ -4,33 +4,7 @@ import simulation as sm
 
 import analysis as an
 
-import plot
-
-# parameters format = size_population, N_interactions, N_generations, Punishment, Reward, N_controls
-
-# check if the values of parameters are accetable
-
-def check_parameters(parameters):
-    
-    for i in range (len(parameters)):
-        
-        if (parameters[i][0] < 12) | (parameters[i][0] > 255):
-            
-            raise ValueError (" size_population is out of range")
-            
-        if (parameters[i][1] < 1) | (parameters[i][1] > 255):
-            
-            raise ValueError (" N_interactions is out of range")
-            
-        if (parameters[i][2] < 1) | (parameters[i][2] > 255):
-            
-            raise ValueError (" N_generations is out of range")
-            
-        if (parameters[i][5] < 0) | (parameters[i][0] > parameters[i][0]):
-            
-            raise ValueError (" N_controls is out of range")
-            
-            
+import plot       
 
 def main():
     
@@ -86,3 +60,42 @@ def main():
     plot.draw_data(results[0], par)
     
     
+
+    
+# check if the values of parameters are accetable
+
+def check_parameters(parameters):
+     
+     """
+     
+     Control if the values passed to the program are valid
+     
+     Parameters:
+
+     -----------------------------
+ 	
+     parameters: array (N of simulations, 12), all the parameters from the csv file
+     
+     -----------------------------
+     
+     """
+     
+     for i in range (len(parameters)):
+         
+         if (parameters[i][0] < 12) | (parameters[i][0] > 255):
+             
+             raise ValueError (" size_population is out of range")
+             
+         if (parameters[i][1] < 1) | (parameters[i][1] > 255):
+             
+             raise ValueError (" N_interactions is out of range")
+             
+         if (parameters[i][2] < 1) | (parameters[i][2] > 4294967294):
+             
+             raise ValueError (" N_generations is out of range")
+             
+         if (parameters[i][5] < 0) | (parameters[i][0] > parameters[i][0]):
+             
+             raise ValueError (" N_controls is out of range")
+             
+         
