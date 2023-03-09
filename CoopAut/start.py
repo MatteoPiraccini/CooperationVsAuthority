@@ -1,5 +1,7 @@
 import numpy as np
 
+from sys import argv
+
 import simulation as sm
 
 import analysis as an
@@ -46,7 +48,20 @@ def check_parameters(parameters):
       
 # the programe start from here
 
-csv = np.genfromtxt('Parameters.csv', delimiter=',', skip_header=1, ndmin=2)
+# arguments: path for the parameter file, seed for random number
+
+path = argv[1]
+
+                  
+if path[-4:] != '.csv':
+    
+                  raise Exception ("The extension must be .csv")
+
+seed = int(argv[2])
+
+np.random.seed(seed)
+
+csv = np.genfromtxt(path, delimiter=',', skip_header=1, ndmin=2)
     
 check_parameters(csv)
     
