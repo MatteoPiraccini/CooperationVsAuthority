@@ -126,26 +126,71 @@ def testing_no_repeat():
            print(DRandO)
 
 
-def testing_new_generation():
+def test_new_generation_one_offspring():
     
     """
-    This function is for testing sm.new_generation()
+    Testing new_generation if one individuals have sources and others not. 
+    
+    The result must be that the next generation is  composed only by its 
+    
+    offspring
+    
+    GIVEN: I have two arrays: strategy and sources
+    WHEN: I perform the new_generation() function
+    THEN: the new generation show the right offspring
     """
 
+    fake_strategy=np.full(10, 0, np.byte)
     
-    fake_strategy=random_int(-5, 7, 10, np.byte)
+    fake_sources=np.zeros(10, np.byte)
     
-    fake_sources=random_int(0, 5, 10, np.byte)
+    fake_strategy[3] = 2
     
-    print(fake_strategy)
-    
-    print(fake_sources)
+    fake_sources[3] = 1
 
     new_generation = sm.new_generation(fake_strategy, fake_sources)
     
-    assert len(fake_strategy) == len(new_generation)
+    assert np.all(new_generation == np.full_like(fake_strategy, 2))
+
+def test_new_generation_many_offspring():
     
-    print(new_generation)     
+    """
+    Testing if new_generation give the correct results with a given array of 
+    
+    strategies and a given array with sources
+    
+    GIVEN: I have two arrays: strategy and sources
+    WHEN: I perform the new_generation() function
+    THEN: the new generation show the right offspring
+    """
+
+    fake_strategy= np.array( [-1, 3, -2, 0, 1, 1, 1, -2, 6, 3])
+    
+    fake_sources= np.array( [1, 0, 2, 0, 2, 5, 1, 3, 1, 0])
+    
+    new_generation = sm.new_generation(fake_strategy, fake_sources)
+    
+    assert np.all(new_generation == [-2, 1, 1, 1, 1, -2, -2, -1, 1, 6])
+
+def test_new_generation_same():
+    
+    """
+    Testing if new_generation return the same array if all individuals have the
+    
+    same sources
+    
+    GIVEN: I have two arrays: strategy and sources
+    WHEN: I perform the new_generation() function
+    THEN: the new generation show the right offspring
+    """
+
+    fake_strategy= np.array( [-1, 3, -2, 0, 1, 1, 1, -2, 6, 3])
+    
+    fake_sources= np.full_like(fake_strategy, 0)
+    
+    new_generation = sm.new_generation(fake_strategy, fake_sources)
+    
+    assert np.all(new_generation == fake_strategy)    
 
          
 def testing_life_cycle():

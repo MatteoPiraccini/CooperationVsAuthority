@@ -232,11 +232,7 @@ def new_generation(strategy, sources):
         
         new_strategy = np.append(new_strategy, appendix)
         
-        frac_offspring[np.argmax(frac_offspring)] = 0
-        
-    # make the distrubution of strategies random
-        
-    np.random.shuffle(new_strategy)
+        frac_offspring[np.argmax(frac_offspring)] = 0   
             
     return new_strategy
             
@@ -304,6 +300,8 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls):
     old_sources=np.array(sources)
     
     new_population = new_generation(strategy, sources)
+    
+    np.random.shuffle(new_population) 
     
     return old_sources, new_population
 
