@@ -65,9 +65,9 @@ def draw_data(data, par):
         
     # on a row we want most three subplot
     
-    rows = int(np.ceil(len(data)/3))
+    rows = int(np.ceil(len(data)/5))
 
-    fig, axs = plt.subplots(rows , 3, sharey=True, tight_layout=True)
+    fig, axs = plt.subplots(rows , 5, sharey=True, tight_layout=True)
     
     plt.xticks(np.arange(-4,7,2 ))
     
@@ -85,7 +85,7 @@ def draw_data(data, par):
     
     for row in range(rows):
         
-        for column in range(3):
+        for column in range(5):
             
             if n_simulation > len(data)-1:
                 
