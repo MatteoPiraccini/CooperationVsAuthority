@@ -205,7 +205,7 @@ def new_generation(strategy, sources):
     
     #in this array will be store the strategies of the new generation
     
-    new_strategy=np.array([], dtype=np.byte)
+    new_strategy=np.full_like(strategy, -7)
     
     proportions = np.float16(sources*inv_tot_sources)
     
@@ -218,21 +218,33 @@ def new_generation(strategy, sources):
     
     int_offspring = np.array(np.modf(offspring)[1], np.byte)
     
+    # where to add the computed offspring
+    
+    curr_index = 0
+    
     for individual in range(tot_pop):
+        
+        if int_offspring[individual] == 0:
+            
+            continue
         
         appendix = np.full(int_offspring[individual], strategy[individual], np.byte)
                
-        new_strategy = np.append(new_strategy, appendix)
+        new_strategy [curr_index : curr_index+len(appendix)] = appendix
+        
+        curr_index += len(appendix)
         
     # add strategies based on the fractional part
 
-    while len(new_strategy) < tot_pop:
+    while curr_index < tot_pop:
         
         appendix= strategy[np.argmax(frac_offspring)]
         
-        new_strategy = np.append(new_strategy, appendix)
+        new_strategy[curr_index] =  appendix
         
-        frac_offspring[np.argmax(frac_offspring)] = 0   
+        frac_offspring[np.argmax(frac_offspring)] = 0
+        
+        curr_index += 1
             
     return new_strategy
             
