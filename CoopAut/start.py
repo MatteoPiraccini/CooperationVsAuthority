@@ -32,7 +32,7 @@ def check_parameters(parameters):
              
              raise ValueError (" size_population is out of range")
              
-         if (parameters[i][1] < 1) | (parameters[i][1] > 255):
+         if (parameters[i][1] < 0) | (parameters[i][1] > 255):
              
              raise ValueError (" N_interactions is out of range")
              
