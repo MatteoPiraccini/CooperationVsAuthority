@@ -66,7 +66,7 @@ import simulation as sm
 donator = 3
 recipient = 7
 onlookers = [ 0, 1, 2, 5, 6, 8, 9, 10, 12, 20]
-strategy_array = [ 0, -1, -2, 2 , ...]
+strategy_array = [ 0, -1, -2, -2 , ...]
 sources_array =[ 0, ..., 0]
 image_matrix = [ [ 0, ..., 0], ..., [ 0, ..., 0]]
 punishement = False
@@ -75,7 +75,7 @@ controls = [ 2, 3, 8]
 
 sm.interaction( donator, recipient, onlookers, strategy_array, sources_array, image_matrix, punishment, reward, controls)
 ```
-The strategy of the donator (k=2) is more than the donator's reputation s about the recipient (s=0) so we obtain that sources_array
+The strategy of the donator (k=-2) is less than the donator's reputation s about the recipient (s=0) so we obtain that sources_array
 
 0|1|...|7|...
 ---|---|---|---|---
