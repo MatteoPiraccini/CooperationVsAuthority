@@ -123,7 +123,7 @@ def interaction(donator, recipient, onlookers,
     
     # controls if donator cooperate
 
-    if strategy_array[donator]>=image_matrix[donator][recipient]:
+    if strategy_array[donator]<image_matrix[donator][recipient]:
 		
         bonus=1
 
