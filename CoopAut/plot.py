@@ -67,7 +67,7 @@ def draw_data(data, par):
     
     rows = int(np.ceil(len(data)/5))
 
-    fig, axs = plt.subplots(rows , 5, sharey=True, tight_layout=True)
+    fig, axs = plt.subplots((rows if rows<4 else 3) , 5, sharey=True, tight_layout=True)
     
     plt.xticks(np.arange(-4,7,2 ))
     
