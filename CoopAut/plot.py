@@ -85,6 +85,10 @@ def draw_data(data, par):
     
     for row in range(rows):
         
+        if row > 3:
+            
+            break
+        
         for column in range(5):
             
             if n_simulation > len(data)-1:
