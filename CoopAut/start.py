@@ -93,7 +93,7 @@ data_list = []
 
 for n_simulation in range(len(par)):
     
-        print('Simulazione:', n_simulation)
+        #print('Simulazione:', n_simulation)
         
         # 1°-dim: generation, 2°-dim: strategy/sources, 3°-dim: individual
         
