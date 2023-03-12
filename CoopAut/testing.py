@@ -9,17 +9,6 @@ import plot
 #############################################
 ##TEST for simulation.py
 
-def testing_init():
-	"""
-    This function is for testing the dimensionality sm.init_simulation()
-    """
-
-	arrays_tupla=sm.init_simulation(100)
-    
-	print(arrays_tupla)
-    
-	assert np.shape(arrays_tupla)==(1,2,100)
-
 
 def random_int(low_value, high_value, size, dtype):
     
@@ -42,25 +31,6 @@ def random_int(low_value, high_value, size, dtype):
     np.random.seed(11)
 
     return np.random.randint(low_value, high_value, size, dtype)
-
-# this function tested a function that now is removed
-def testing_count(min,max):
-	"""
-    This function is for testing if counter work
-    """
-	assert isinstance(min,int)
-
-	assert isinstance(max,int)
-
-	assert max>min
-
-	a=np.array(np.random.randint(min, max, 100, np.byte))
-		
-	count_row=sm.count_population(a)
-
-	print(count_row)
-		
-	print(a)
 	
 
 def testing_interaction():
@@ -99,31 +69,6 @@ def testing_interaction():
           image[:, fake_indexes[0]], 
           
           sep='\n')
-
-# this is a test for a function now removed
-def testing_no_repeat():
-    
-    """
-    This function is for testing the sm.avoid_repetition()
-    """
-
-    x=0
-      
-    while x<10:
-      
-        #DRandO = Donator, Recipient and Onlookers
-      
-        DRandO=sm.random_int( 0, 100, 12, np.byte)
-      
-        a=np.unique(DRandO, return_counts=True)[1]
-      
-        b=np.ones_like(a)
-      
-        if np.array_equal(a,b):
-          
-           x+=1
-           
-           print(DRandO)
 
 
 def test_new_generation_one_offspring():
@@ -190,7 +135,7 @@ def test_new_generation_same():
     
     new_generation = sm.new_generation(fake_strategy, fake_sources)
     
-    assert np.all(new_generation == fake_strategy)    
+    assert np.all(new_generation == fake_strategy)
 
          
 def testing_life_cycle():
