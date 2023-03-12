@@ -36,7 +36,7 @@ def check_parameters(parameters):
              
              raise ValueError (" N_interactions is out of range")
              
-         if (parameters[i][2] < 1) | (parameters[i][2] > 4294967294):
+         if (parameters[i][2] < 1) | (parameters[i][2] > 65534):
              
              raise ValueError (" N_generations is out of range")
              
@@ -73,7 +73,7 @@ for n_simulation in range(len(csv)):
         
         row = (np.ubyte(csv[n_simulation][0]), # size of population
                                                 
-               np.ubyte(csv[n_simulation][1]), # N of interactions
+               np.ushort(csv[n_simulation][1]), # N of interactions
                                                 
                np.uintc(csv[n_simulation][2]), # N of generations
                                                 
