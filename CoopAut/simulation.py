@@ -313,9 +313,30 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls):
     
     new_population = new_generation(strategy, sources)
     
-    np.random.shuffle(new_population) 
+    np.random.shuffle(new_population)
+    
+    mutations(False, new_population)
     
     return old_sources, new_population
+
+
+
+def mutations(on, population):
+    
+    if on == False:
+        
+        return
+    
+    strategy = np.arange(-5,7,1, np.byte )
+    
+    p_mutations = np.array(random_int(0, 1000, population.shape()))
+    
+    mutated = np.nonzero(p_mutations == 0)
+    
+    for i in mutated:
+        
+        population[i] = np.random.choice(strategy [strategy != population[i]])
+    
 
 
 
