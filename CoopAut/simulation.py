@@ -249,7 +249,7 @@ def new_generation(strategy, sources):
     return new_strategy
             
     
-def life_cycle(population, N_interactions, punishment, reward, N_controls):
+def life_cycle(population, N_interactions, punishment, reward, N_controls, mutation_off):
     
     
     """
@@ -315,32 +315,39 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls):
     
     np.random.shuffle(new_population)
     
-    mutations(False, new_population)
+    new_population = mutations(mutation_off, new_population)
     
     return old_sources, new_population
 
 
-
-def mutations(on, population):
+def mutations(off, population):
     
-    if on == False:
+    if off == True:
         
-        return
+        return population
     
     strategy = np.arange(-5,7,1, np.byte )
     
-    p_mutations = np.array(random_int(0, 1000, population.shape()))
+    p_mutations = np.array(np.random.randint(0, 1000, len(population)))
     
-    mutated = np.nonzero(p_mutations == 0)
+    mutated = np.nonzero(p_mutations == 0)[0]
+    
+    if mutated == []:
+        
+        return population
     
     for i in mutated:
         
-        population[i] = np.random.choice(strategy [strategy != population[i]])
+        st = strategy [strategy != population[i]]
+        
+        population[i] = np.random.choice(st, 1)
+        
+    return population
     
 
 
 
-def evolution(N_interactions, N_generation, populations, punishment, reward, controls):
+def evolution(N_interactions, N_generation, populations, punishment, reward, controls, mutation_off):
     
     """
     Evolution of the various generations
@@ -373,7 +380,7 @@ def evolution(N_interactions, N_generation, populations, punishment, reward, con
 
     for generation in range(N_generation):
         
-        old_sources, new_strategies = np.array(life_cycle(populations[generation], N_interactions, punishment, reward, controls), np.byte)
+        old_sources, new_strategies = np.array(life_cycle(populations[generation], N_interactions, punishment, reward, controls, mutation_off), np.byte)
         
         populations[generation][1] = old_sources
         

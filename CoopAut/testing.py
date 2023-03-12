@@ -136,6 +136,16 @@ def test_new_generation_same():
     new_generation = sm.new_generation(fake_strategy, fake_sources)
     
     assert np.all(new_generation == fake_strategy)
+    
+def testing_mutation():
+    
+    a = np.zeros(1000)
+    
+    b = np.zeros(1000)
+    
+    a=sm.mutations(True, a)
+    
+    
 
          
 def testing_life_cycle():

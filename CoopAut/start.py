@@ -59,6 +59,8 @@ if path[-4:] != '.csv':
 
 seed = int(argv[2])
 
+mutation_off = bool(argv[3])
+
 np.random.seed(seed)
 
 csv = np.genfromtxt(path, delimiter=',', skip_header=1, ndmin=2)
@@ -99,7 +101,7 @@ for n_simulation in range(len(par)):
         
         populations = np.array(sm.init_simulation(par[n_simulation][0]), np.byte) # cercare di eliminarlo
     
-        data_list.append((sm.evolution(par[n_simulation][1], par[n_simulation][2], populations, par[n_simulation][3], par[n_simulation][4], par[n_simulation][5])))
+        data_list.append((sm.evolution(par[n_simulation][1], par[n_simulation][2], populations, par[n_simulation][3], par[n_simulation][4], par[n_simulation][5], mutation_off)))
 
 data = np.array(data_list)
 
