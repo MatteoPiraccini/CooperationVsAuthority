@@ -93,7 +93,7 @@ def test_new_generation_one_offspring():
     
     fake_sources[3] = 1
 
-    new_generation = sm.new_generation(fake_strategy, fake_sources)
+    new_generation = sm.new_generation(fake_strategy, fake_sources, True)
     
     assert np.all(new_generation == np.full_like(fake_strategy, 2))
 
@@ -113,7 +113,7 @@ def test_new_generation_many_offspring():
     
     fake_sources= np.array( [1, 0, 2, 0, 2, 5, 1, 3, 1, 0])
     
-    new_generation = sm.new_generation(fake_strategy, fake_sources)
+    new_generation = sm.new_generation(fake_strategy, fake_sources, True)
     
     assert np.all(new_generation == [-2, 1, 1, 1, 1, -2, -2, -1, 1, 6])
 
@@ -133,19 +133,9 @@ def test_new_generation_same():
     
     fake_sources= np.full_like(fake_strategy, 0)
     
-    new_generation = sm.new_generation(fake_strategy, fake_sources)
+    new_generation = sm.new_generation(fake_strategy, fake_sources, True)
     
     assert np.all(new_generation == fake_strategy)
-    
-def testing_mutation():
-    
-    a = np.zeros(1000)
-    
-    b = np.zeros(1000)
-    
-    a=sm.mutations(True, a)
-    
-    
 
          
 def testing_life_cycle():
@@ -177,22 +167,27 @@ def testing_simulation():
 #########################################################
 ## TEST for analysis.py
     
-def testing_an_strategy():
+def test_an_same_strategy():
     
     """
     This function is for testing analysis.py
     
     """
+    for i in range(1,13):
+        
+        N_generations = 3
     
-    fake_n_gen=3
+        size = i
     
-    fake_size_pop=10
+        start = -5
     
-    fake_data= random_int(-5, 7, (fake_n_gen, 2, fake_size_pop), np.byte)
+        fake_data= np.full((N_generations,2, size), np.arange(start, start+size, 1))
     
-    print(fake_data)
+        freq = an.frequency_strategies(fake_data)
     
-    print(an.frequency_strategies(fake_data))
+        freq = np.around(freq,3)
+    
+        assert np.all( freq[freq !=0] == np.around(1/size,3))
     
 #########################################################
 ## TEST for plot.py
