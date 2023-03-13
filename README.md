@@ -36,7 +36,7 @@ python start.py arg1 arg2 arg3
 
 -arg2: int, the seed of the random generation
 
--arg3: bool, if there are mutations or not
+-arg3: bool, if the mutations are off or not
 
 
 ### Parameters file
@@ -70,3 +70,12 @@ size_population3,N_interactions3,N_generations3,punishment3,reward3,controls3
 -reward: True/False, presence/absence of a punishing authority
 
 -controls: int, range: 1-size_population, how much individuals are checked by the authority
+
+## Output
+
+- stem plots for the first simulations (max 15) of the frequencies of each strategy over all generations
+- Results.csv, a file in the directory CoopAut whith the following
+```
+frequency of 0-strategy, 1-strategy, ..., 6-strategy, -5-strategy, -4-strategy, ... -1-strategy, mean strategy
+```
+In each lines there are the data of one simulation
