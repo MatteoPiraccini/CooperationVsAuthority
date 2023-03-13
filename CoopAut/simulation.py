@@ -273,7 +273,7 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls, mutat
     
     N_controls: int, number of individual to be controled for each interaction
 
-    mutation_off: bool, if the mutations are presents
+    mutation_off: bool, if the mutations are off
     
     -----------------------------
     
@@ -329,7 +329,7 @@ def mutations(off, population):
     Parameters:
     
     -----------------------------
-    mutation_off: bool, if the mutations are presents
+    mutation_off: bool, if the mutations are off
 
     population: array (size of population), the strategy of the population without 
 
@@ -391,7 +391,7 @@ def evolution(N_interactions, N_generation, populations, punishment, reward, con
    
     N_controls: int, number of individuals to be controled for each interaction
 
-    mutation_off: bool, if the mutations are presents
+    mutation_off: bool, if the mutations are off
     
     -----------------------------
     

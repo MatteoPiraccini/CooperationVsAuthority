@@ -144,7 +144,7 @@ Implemantation of a life cycle of a generation with interactions and the arise o
     
 -N_controls: int, number of individuals to be controled for each interaction
 
--mutation_off: bool, if the mutations are presents
+-mutation_off: bool, if the mutations are off
 
     
 Return two arrays (size of population), first with the sources of the old generation, the other with strategies of the new one
@@ -156,7 +156,7 @@ Implemantation of mutations in the strategy of the population. The chance of the
     
 #### Parameters:
     
--mutation_off: bool, if the mutations are presents
+-mutation_off: bool, if the mutations are off
 
 -population: array (size of population), the strategy of the population without mutation
     
@@ -183,7 +183,7 @@ Evolution of the various generations.
    
 -N_controls: int, number of individuals to be controled for each interaction
 
--mutation_off: bool, if the mutations are presents
+-mutation_off: bool, if the mutations are off
 
     
 Return an array (N_generation, 2, size of population) with strategies and sources for each generation
