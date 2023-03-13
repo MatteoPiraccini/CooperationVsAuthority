@@ -41,7 +41,7 @@ We obtain this
 
 ## `draw_data(data, par)`
 
-Generate a series of stem plot with the frequencies of strategies
+Generate a series of stem plot with the frequencies of strategies. Max 15 plot
 
 #### Parameters:
 	
