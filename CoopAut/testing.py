@@ -167,27 +167,40 @@ def testing_simulation():
 #########################################################
 ## TEST for analysis.py
     
-def test_an_same_strategy():
+def test_an_strategy_freq():
     
     """
-    This function is for testing analysis.py
+    This function is for testing if the right frequencies are well computed
     
+    GIVEN: I have an array (n,2,m) with the strategies in [:,0,:]
+    WHEN: The simulation is concluded
+    THEN: The frequencies of the values of the given array
     """
-    for i in range(1,13):
+    for j in range(1,10000):
         
-        N_generations = 3
+        for i in range(1,13):
+        
+            N_generations = j
     
-        size = i
+            size = i
     
-        start = -5
+            start = -5
     
-        fake_data= np.full((N_generations,2, size), np.arange(start, start+size, 1))
+            fake_data= np.full((N_generations,2, size), np.arange(start, start+size, 1))
     
-        freq = an.frequency_strategies(fake_data)
+            freq = an.frequency_strategies(fake_data)
+            
+            print(freq)
     
-        freq = np.around(freq,3)
+            freq = freq[freq !=0]
+            
+            print(j)
+            
+            print(size)
+            
+            print(freq)
     
-        assert np.all( freq[freq !=0] == np.around(1/size,3))
+            assert np.allclose( freq, np.full_like(freq, 1/size), atol=1e-03)
     
 #########################################################
 ## TEST for plot.py
