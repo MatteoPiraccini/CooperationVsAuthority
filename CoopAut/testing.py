@@ -33,43 +33,135 @@ def random_int(low_value, high_value, size, dtype):
     return np.random.randint(low_value, high_value, size, dtype)
 	
 
-def testing_interaction():
+def test_interaction_coop_sources():
     
     """
-    This function is for testing sm.interaction()
+    This function is for testing if cooperation mechanism in interaction work well
+    
+    GIVEN: the strategy array, the donator and recipient indexes and image matrix
+    WHEN: when I perform sm.interaction()
+    THEN: The cooperation consequences on sources and reputation are applied
     """
+    for size_pop in range(12, 200):
 
-    size_pop=20
+        strategy= np.arange(-5, 7, 1, dtype=np.byte)
+        
+        mod = (size_pop%12)
+        
+        quot = size_pop // 12
+        
+        if mod == 0:
+            
+            population = np.repeat(strategy, quot)
+            
+            flat_image = np.ravel(np.full(((size_pop),(size_pop)),population))
+            
+        else:
     
-    fake_indexes= np.random.choice(np.arange(size_pop), 12, False)
+           population = np.hstack((np.repeat(strategy,quot), strategy[:mod]))
+           
+           flat_image = (np.ravel(np.full(((size_pop),(size_pop)),population)))
 
-    strategy=np.array(random_int(-5,7,size_pop, dtype=np.byte))
-
-    sources=np.array(random_int(0,4,size_pop, np.byte))
-
-    image=np.array(random_int(-4,7, (size_pop,size_pop), np.byte))
-
-    print(fake_indexes)
-
-    print(sources,)
+        sources=np.zeros(size_pop)
     
-    print(image[:, fake_indexes[0]])
+        for donator in range(size_pop):
+        
+            for recipient in range(size_pop):
+            
+                if donator == recipient:
+                
+                    continue
+    
+                for i in range(size_pop):
+        
+                    image = np.reshape(np.roll(flat_image, i), (size_pop,size_pop))
 	
-    sm.interaction( fake_indexes[0], fake_indexes[1], fake_indexes[-10:], strategy, sources, image, True, True, [])
-
+                    sm.interaction( donator, recipient, [], population, sources, image, False, False, [])
+                    
+                    assert (sources[recipient] == 1 if population[donator] < image[donator][recipient] else sources[recipient] == 0)
+                    
+                    sources[recipient] = 0
+                    
+def test_interaction_coop_reputation():
     
-    print(sources, 
-          
-          strategy[fake_indexes[0]],
-          
-          ' >=', 
-          
-          image[fake_indexes[0]][fake_indexes[1]], 
-          
-          image[:, fake_indexes[0]], 
-          
-          sep='\n')
+    """
+    This function is for testing if reputation in interaction work well
+    
+    GIVEN: the strategy array, the donator and recipient indexes and image matrix
+    WHEN: when I perform sm.interaction()
+    THEN: The cooperation consequences on reputation are applied
+    """
+    for size_pop in range(12, 50):
 
+        strategy= np.arange(-5, 7, 1, dtype=np.byte)
+        
+        mod = (size_pop%12)
+        
+        quot = size_pop // 12
+        
+        if mod == 0:
+            
+            population = np.repeat(strategy, quot)
+            
+            flat_image = np.ravel(np.full(((size_pop),(size_pop)),population))
+            
+        else:
+    
+           population = np.hstack((np.repeat(strategy,quot), strategy[:mod]))
+           
+           flat_image = (np.ravel(np.full(((size_pop),(size_pop)),population)))
+
+        sources=np.zeros(size_pop)
+    
+        for donator in range(size_pop):
+        
+            for recipient in range(size_pop):
+            
+                if donator == recipient:
+                
+                    continue
+    
+                for i in range(12):
+                    
+                    #print(size_pop)
+                    
+                    #print(flat_image)
+                    
+                    if (recipient > 1) & (recipient<i+12):
+                        
+                        continue
+                    
+                    if (donator > 1) & (donator<i+12):
+                        
+                        continue
+                    
+                    if i+11 >= size_pop:
+                        
+                        continue
+                    
+                    onlookers = np.arange(i,i+11)
+        
+                    image = np.reshape(np.roll(flat_image, i), (size_pop,size_pop))
+                    
+                    image_copy = image
+	
+                    sm.interaction( donator, recipient, onlookers, strategy, sources, image, False, False, [])
+
+                    onlookers = np.append(onlookers, recipient)
+                    
+                    print(size_pop)
+                    
+                    print(population[donator], image[donator][recipient])
+                    
+                    print()
+                    
+                    print(image[onlookers][donator])
+                    
+                    print(image_copy[onlookers][donator])
+                    
+                    assert ( np.all(image[onlookers][donator] != image_copy[onlookers][donator]) if population[donator] < image[donator][recipient] else np.all(image == image_copy))
+                    
+                    image[onlookers][donator] = image_copy[onlookers][donator]
 
 def test_new_generation_one_offspring():
     
@@ -189,45 +281,13 @@ def test_an_strategy_freq():
             fake_data= np.full((N_generations,2, size), np.arange(start, start+size, 1))
     
             freq = an.frequency_strategies(fake_data)
-            
-            print(freq)
     
             freq = freq[freq !=0]
-            
-            print(j)
-            
-            print(size)
-            
-            print(freq)
     
             assert np.allclose( freq, np.full_like(freq, 1/size), atol=1e-03)
     
 #########################################################
-## TEST for plot.py
-    
-def testing_plot():
-    
-    """
-    This function is for testing plot.draw_data.py
-    
-    """
-    
-    n_simulations=7
-    
-    fake_data=(np.random.uniform(0.0, 0.25, (n_simulations,12)))
-    
-    # ci vogliono i parametri
-    
-    ls=(2,3,4,True, False,2)
-    
-    parameters=()
-    
-    for i in range(n_simulations):
-        
-        parameters=(*parameters, ls)
-    
-    plot.draw_data(fake_data, parameters)
-    
+## TEST for plot.py   
 
     
 def testing_reorganize():
@@ -243,114 +303,3 @@ def testing_reorganize():
     
     print(plot.reorganize_data(fake_data))
     
-    
-###########################################################
-## TEST for start.py
-
-
-    
-def not_a_mess_with_append():
-    
-    """
-    This function is for testing the behavior of append and if it work under a
-    
-    certain way
-    
-    """
-    
-    size=5
-    
-    populations=np.zeros((1,2,size), np.byte)
-    
-    generation=0
-    
-    old_sources= np.empty(size, np.byte)
-    
-    new_population = np.array(np.vstack((np.ones(size, np.byte),np.zeros_like(old_sources))))
-    
-    print(populations, old_sources, new_population, sep='\n\n')
-    
-    populations[generation][1]=old_sources
-    
-    populations=np.append(populations, np.array([new_population], np.byte), axis=0)
-    
-    print('\n\n', populations, '\n\n\n')
-    
-    
-    assert np.shape(populations) == (2,2,size)
-    
-    print(populations[1][0])
-    
-    print(populations[0][1])
-    
-          
-def try_main():
-    
-    """
-    This function is for testing the code in start.py
-    
-    """
-    
-    n_generation=[2, 1] # esclusa la 0
-
-    n_interactions=[100, 190]
-
-    tot_simulations=2
-
-    populations=np.array(sm.init_simulation(), np.byte)
-    
-    assert np.shape(populations) == (1,2,100)
-
-    data_list=[]
-
-    for n_simulations in range(tot_simulations):
-        
-        data_list.append((sm.evolution(n_generation[n_simulations], n_interactions[n_simulations], populations))) ### deve fare tutto in colpo solo con diversi tipi di simulazione
-
-    data=tuple(data_list)
-    
-    print(data)
-    
-def try_to_import():
-    
-    """
-    This function is for testing if the data for the parameters are imported correctly
-    
-    """
-    
-    csv=np.genfromtxt('https://raw.githubusercontent.com/MatteoPiraccini/CooperationVsAuthority/main/Parameters.csv', delimiter=',', skip_header=1)
-    
-    print(csv)
-    
-    ls_parameters=[]
-    
-    # max parameters : 255, 255
-    
-    for n_simulation in range(len(csv)):
-        
-        tupla=(np.ubyte(csv[n_simulation][0]),
-                                                
-                                                np.ubyte(csv[n_simulation][1]),
-                                                
-                                                np.uintc(csv[n_simulation][2]),
-                                                
-                                                np.bool_(csv[n_simulation][3]),
-                                                
-                                                np.bool_(csv[n_simulation][4]),
-                                                
-                                                np.ubyte(csv[n_simulation][5]))
-        
-        ls_parameters.append(tupla)
-    
-    print(ls_parameters)
-    
-def test_export():
-    
-    """
-    This function is for testing export of data
-    
-    """
-    
-    fake_data= np.ones((2,10))
-    
-    np.savetxt('Prova.csv', fake_data, delimiter=',',fmt='%10.5f')
