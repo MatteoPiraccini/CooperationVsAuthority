@@ -255,15 +255,15 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls, mutat
     """
     Implemantation of a life cycle of a generation with interactions and 
     
-    the arise of the next generation based on sources
+    the arise of the next generation based on sources with possibility of mutations
     
     Parameters:
     
     -----------------------------
     
-    population: array (2, size of population), strategy (0-row) and sources (1-row) of
-    
-    each individuals
+    population: array (2, size of population), strategy (0-row) and sources (1-row) 
+
+    of each individuals
     
     N_interactions: int, how many interactions are iterated
     
@@ -272,6 +272,8 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls, mutat
     reward: bool, to indicate if punishment is on
     
     N_controls: int, number of individual to be controled for each interaction
+
+    mutation_off: bool, if the mutations are presents
     
     -----------------------------
     
@@ -321,6 +323,25 @@ def life_cycle(population, N_interactions, punishment, reward, N_controls, mutat
 
 
 def mutations(off, population):
+    """
+    Implemantation of mutations in the strategy of the population
+    
+    Parameters:
+    
+    -----------------------------
+    mutation_off: bool, if the mutations are presents
+
+    population: array (size of population), the strategy of the population without 
+
+    mutation
+    
+    -----------------------------
+    
+    Return the same array if there is no mutations, otherwise the array of the 
+
+    mutated population
+    
+    """
     
     if off == True:
         
@@ -360,15 +381,17 @@ def evolution(N_interactions, N_generation, populations, punishment, reward, con
     
     N_generation: int, how many generations are iterated
     
-    populations: array (2, size of population), strategy (0-row) and sources (1-row) of
+    populations: array (2, size of population), strategy (0-row) and sources (1-row) 
 
-    the 0-generation
+    of the 0-generation
    
     punishment: bool, to indicate if punishment is on
        
     reward: bool, to indicate if punishment is on
    
     N_controls: int, number of individuals to be controled for each interaction
+
+    mutation_off: bool, if the mutations are presents
     
     -----------------------------
     
