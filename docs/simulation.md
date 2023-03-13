@@ -128,9 +128,9 @@ Creation of the next generation; each indivuals has an offspring based on its so
 Return an array (1, size of population) of the strategies of the individual of the new generation
 
 
-## `life_cycle(population, N_interactions, punishment, reward, N_controls)`
+## `life_cycle(population, N_interactions, punishment, reward, N_controls, mutation_off)`
 
-Implemantation of a life cycle of a generation with interactions and the arise of the next generation based on sources
+Implemantation of a life cycle of a generation with interactions and the arise of the next generation based on sources with possibility of mutations
     
 #### Parameters:
    
@@ -144,11 +144,28 @@ Implemantation of a life cycle of a generation with interactions and the arise o
     
 -N_controls: int, number of individuals to be controled for each interaction
 
+-mutation_off: bool, if the mutations are presents
+
     
 Return two arrays (size of population), first with the sources of the old generation, the other with strategies of the new one
 
 
-## `evolution(N_interactions, N_generation, populations, punishment, reward, controls)`
+## `mutations(off, population)`
+
+Implemantation of mutations in the strategy of the population. The chance of the mutations is 0.001
+    
+#### Parameters:
+    
+-mutation_off: bool, if the mutations are presents
+
+-population: array (size of population), the strategy of the population without mutation
+    
+  
+Return the same array if there is no mutations, otherwise the array of the mutated population
+
+
+
+## `evolution(N_interactions, N_generation, populations, punishment, reward, N_controls, mutation_off)`
 
 Evolution of the various generations.
     
@@ -165,6 +182,8 @@ Evolution of the various generations.
 -reward: bool, to indicate if punishment is on
    
 -N_controls: int, number of individuals to be controled for each interaction
+
+-mutation_off: bool, if the mutations are presents
 
     
 Return an array (N_generation, 2, size of population) with strategies and sources for each generation
