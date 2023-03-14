@@ -253,10 +253,14 @@ def test_an_strategy_freq():
 ## TEST for plot.py   
 
     
-def test__plot_reorganize():
+def test_plot_reorganize():
     
     """
-    This function is for testing plot.reorganize_data()
+    This function is for test that plot.reorganize() exchanges the right columns
+    
+    GIVEN: I have an array 2D
+    WHEN: I am about to plot data
+    THEN: The array with data in the right order
     
     """
     
