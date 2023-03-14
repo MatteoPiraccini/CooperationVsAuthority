@@ -113,9 +113,9 @@ def test_interaction_coop_reputation():
 
         sources=np.zeros(size_pop)
     
-        for donator in range(size_pop):
+        for donator in np.arange((size_pop)):
         
-            for recipient in range(size_pop):
+            for recipient in np.arange((size_pop)):
             
                 if donator == recipient:
                 
@@ -127,11 +127,11 @@ def test_interaction_coop_reputation():
                     
                     #print(flat_image)
                     
-                    if (recipient > 1) & (recipient<i+12):
+                    if (recipient >= i) & (recipient<i+12):
                         
                         continue
                     
-                    if (donator > 1) & (donator<i+12):
+                    if (donator > i) & (donator<i+12):
                         
                         continue
                     
@@ -143,25 +143,29 @@ def test_interaction_coop_reputation():
         
                     image = np.reshape(np.roll(flat_image, i), (size_pop,size_pop))
                     
-                    image_copy = image
+                    image_copy = np.array(image)
 	
-                    sm.interaction( donator, recipient, onlookers, strategy, sources, image, False, False, [])
+                    sm.interaction( donator, recipient, onlookers, population, sources, image, False, False, [])
 
                     onlookers = np.append(onlookers, recipient)
                     
-                    print(size_pop)
+                    #print(size_pop)
                     
-                    print(population[donator], image[donator][recipient])
+                    #print(population[donator], image[donator][recipient])
                     
-                    print()
+                    #print(image)
                     
-                    print(image[onlookers][donator])
+                    #print(image_copy)
                     
-                    print(image_copy[onlookers][donator])
+                    #print(onlookers)
                     
-                    assert ( np.all(image[onlookers][donator] != image_copy[onlookers][donator]) if population[donator] < image[donator][recipient] else np.all(image == image_copy))
+                    for j in range(len(onlookers)):
+                        
+                        assert (image[onlookers[j]][donator] == image_copy[onlookers[j]][donator]+1) if population[donator] < image[donator][recipient] else image[onlookers[j]][donator] == image_copy[onlookers[j]][donator]-1
                     
-                    image[onlookers][donator] = image_copy[onlookers][donator]
+                    #assert ( np.all(image[onlookers][donator] == image_copy[onlookers][donator]+1) if population[donator] < image[donator][recipient] else ( np.all(image[onlookers][donator] == image_copy[onlookers][donator]-1)))
+                    
+                    image = np.array(image_copy)
 
 def test_new_generation_one_offspring():
     
