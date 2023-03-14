@@ -87,11 +87,11 @@ def test_interaction_coop_reputation():
     """
     This function is for testing if reputation in interaction work well
     
-    GIVEN: the strategy array, the donator and recipient indexes and image matrix
+    GIVEN: the strategy array, the donator, recipient and onlookers indexes and image matrix
     WHEN: when I perform sm.interaction()
     THEN: The cooperation consequences on reputation are applied
     """
-    for size_pop in range(12, 50):
+    for size_pop in range(12, 200):
 
         strategy= np.arange(-5, 7, 1, dtype=np.byte)
         
@@ -123,10 +123,6 @@ def test_interaction_coop_reputation():
     
                 for i in range(12):
                     
-                    #print(size_pop)
-                    
-                    #print(flat_image)
-                    
                     if (recipient >= i) & (recipient<i+12):
                         
                         continue
@@ -149,22 +145,10 @@ def test_interaction_coop_reputation():
 
                     onlookers = np.append(onlookers, recipient)
                     
-                    #print(size_pop)
-                    
-                    #print(population[donator], image[donator][recipient])
-                    
-                    #print(image)
-                    
-                    #print(image_copy)
-                    
-                    #print(onlookers)
-                    
                     for j in range(len(onlookers)):
                         
                         assert (image[onlookers[j]][donator] == image_copy[onlookers[j]][donator]+1) if population[donator] < image[donator][recipient] else image[onlookers[j]][donator] == image_copy[onlookers[j]][donator]-1
-                    
-                    #assert ( np.all(image[onlookers][donator] == image_copy[onlookers][donator]+1) if population[donator] < image[donator][recipient] else ( np.all(image[onlookers][donator] == image_copy[onlookers][donator]-1)))
-                    
+                                        
                     image = np.array(image_copy)
 
 def test_new_generation_one_offspring():
@@ -232,31 +216,6 @@ def test_new_generation_same():
     new_generation = sm.new_generation(fake_strategy, fake_sources, True)
     
     assert np.all(new_generation == fake_strategy)
-
-         
-def testing_life_cycle():
- 
-    """
-    This function is for testing sm.lifecycle()
-    """
-    
-    size=20
-    
-    fake_population=[sm.random_int(-5, 7, size, np.byte), np.array(sm.random_int(0, 7, size, np.byte), np.byte)]
-    
-    print(sm.life_cycle(fake_population, 3, False, True, 10))
-    
-def testing_simulation():
-    
-    fake_par=(20, 0, 2, False, False, 10 )
-    
-    populations=sm.init_simulation(fake_par[0])
-    
-    print(populations)
-
-    data_list=(sm.evolution(fake_par[1], fake_par[2], populations, fake_par[3], fake_par[4], fake_par[5]))
-    
-    print(data_list)
     
     
     
@@ -294,7 +253,7 @@ def test_an_strategy_freq():
 ## TEST for plot.py   
 
     
-def testing_reorganize():
+def test__plot_reorganize():
     
     """
     This function is for testing plot.reorganize_data()
@@ -303,7 +262,10 @@ def testing_reorganize():
     
     fake_data=np.array([[0,1,2,3,4,5,6,-5,-4,-3,-2,-1] for i in range(10)])
     
-    print(fake_data)
+    comparison = np.array([[-5,-4,-3,-2,-1,0,1,2,3,4,5,6] for i in range(10)])
     
-    print(plot.reorganize_data(fake_data))
+    re_data = plot.reorganize_data(fake_data)
+    
+    assert np.all(re_data == comparison)
+
     
